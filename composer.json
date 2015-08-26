@@ -1,0 +1,31 @@
+{
+  "name": "objective-php/html",
+  "description": "HTML helper classes for ObjectivePHP",
+  "type": "library",
+  "keywords": [
+    "html",
+    "objective php"
+  ],
+  "homepage": "https://github.com/objective-php/html",
+  "license": "GPL-3.0",
+  "authors": [
+    {
+      "name": "Gauthier 'Rusty' Delamarre",
+      "email": "gauthier@objective-php.org",
+      "role": "lead"
+    }
+  ],
+  "require": {
+    "php": ">=5.6.0"
+  },
+  "require-dev": {
+    "objective-php/phpunit-extension": "1.0",
+    "objective-php/primitives": "dev-master",
+    "phpunit/phpunit": "4.*"
+  },
+  "autoload": {
+    "psr-4": {
+      "ObjectivePHP\\Html\\": "src/"
+    }
+  }
+}
