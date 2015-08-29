@@ -7,16 +7,61 @@
 
     class Attributes extends Collection
     {
+        /**
+         * @param array $input
+         */
+        public function __construct($input = [])
+        {
+            // initialize sub Collections
+            $this->set('class', new Collection());
+
+            foreach ($input as $attribute => $value)
+            {
+                $this->set($attribute, $value);
+            }
+        }
+
+        /**
+         * @param $attribute
+         * @param $value
+         *
+         * @return $this
+         * @throws \ObjectivePHP\Primitives\Exception
+         */
+        public function set($attribute, $value)
+        {
+            // handle collections
+            if ($this->has($attribute))
+            {
+                $set = $this->get('attribute');
+                if ($set instanceof Collection)
+                {
+                    $set->clear()->append($value);
+                    return $this;
+                }
+            }
+
+            parent::set($attribute, $value);
+            return $this;
+        }
+
         public function __toString()
         {
             $flattenedAttributes = [];
 
-            $this->each(function($value, $attribute) use(&$flattenedAttributes)
+            $this->each(function ($value, $attribute) use (&$flattenedAttributes)
             {
-                if(is_int($attribute)) $flattenedAttributes[] = $value;
-                else $flattenedAttributes[] = $attribute .'="' . Collection::cast($value)->join(' ') . '"';
+                // skip empty collections
+                if($value instanceof Collection && $value->isEmpty()) return;
+
+
+                if (is_int($attribute))
+                {
+                    $flattenedAttributes[] = $value;
+                }
+                else $flattenedAttributes[] = $attribute . '="' . Collection::cast($value)->join(' ') . '"';
             });
 
-            return implode(' ', $flattenedAttributes);
+            return trim(implode(' ', $flattenedAttributes));
         }
     }

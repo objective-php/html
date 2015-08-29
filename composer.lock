@@ -112,12 +112,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/objective-php/primitives.git",
-                "reference": "46c9a50d30e2eff50193915b8b3bd057c8fbecb0"
+                "reference": "02a6af91c924ea336a918bb8369e31bb69765442"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/objective-php/primitives/zipball/46c9a50d30e2eff50193915b8b3bd057c8fbecb0",
-                "reference": "46c9a50d30e2eff50193915b8b3bd057c8fbecb0",
+                "url": "https://api.github.com/repos/objective-php/primitives/zipball/02a6af91c924ea336a918bb8369e31bb69765442",
+                "reference": "02a6af91c924ea336a918bb8369e31bb69765442",
                 "shasum": ""
             },
             "require": {
@@ -158,7 +158,7 @@
                 "objective php",
                 "primitives"
             ],
-            "time": "2015-08-22 13:31:21"
+            "time": "2015-08-29 22:04:55"
         },
         {
             "name": "phpdocumentor/reflection-docblock",
