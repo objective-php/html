@@ -91,7 +91,7 @@
          *
          * @return Tag
          */
-        public static function div($content, ...$classes)
+        public static function div($content = null, ...$classes)
         {
             return self::factory('div', $content, ...$classes);
         }
