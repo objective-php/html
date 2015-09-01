@@ -339,4 +339,9 @@
             return $this;
         }
 
+        public function close()
+        {
+            return '</' . $this->getTag() . '>';
+        }
+
     }
