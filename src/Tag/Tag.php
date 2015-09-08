@@ -56,19 +56,17 @@
             if ($parameters)
             {
                 $content = array_shift($parameters);
-
-                if ($parameters)
-                {
-                    $classes = $parameters;
-                }
             }
 
             return self::factory($tag, $content, ...$parameters);
         }
 
         /**
-         * @param $tag
-         * @param $parameters
+         * Generate a tag
+         *
+         * @param string $tag
+         * @param string $content
+         * @param array  $classes
          *
          * @return $this
          */
