@@ -7,8 +7,12 @@
     use ObjectivePHP\Html\Exception;
     use ObjectivePHP\Primitives\Collection\Collection;
     use ObjectivePHP\Primitives\Merger\MergePolicy;
-    use ObjectivePHP\Primitives\String\String;
 
+    /**
+     * Class Tag
+     *
+     * @package ObjectivePHP\Html\Tag
+     */
     class Tag implements TagInterface
     {
 
@@ -95,6 +99,284 @@
         }
 
         /**
+         * @param $content
+         * @param ...$classes
+         *
+         * @return Tag
+         */
+        public static function span($content, ...$classes)
+        {
+            return self::factory('span', $content, ...$classes);
+        }
+
+        /**
+         * @param $content
+         * @param ...$classes
+         *
+         * @return Tag
+         */
+        public static function br()
+        {
+            return self::factory('br', null);
+        }
+
+        /**
+         * @param $content
+         * @param ...$classes
+         *
+         * @return Tag
+         */
+        public static function hr()
+        {
+            return self::factory('hr', null);
+        }
+
+        /**
+         * @param $content
+         * @param ...$classes
+         *
+         * @return Tag
+         */
+        public static function a($content, $href, ...$classes)
+        {
+            $a = self::factory('a', $content, ...$classes);
+            $a->addAttribute('href', $href);
+
+            return $a;
+        }
+
+        /**
+         * @param $content
+         * @param ...$classes
+         *
+         * @return Tag
+         */
+        public static function pre($content, ...$classes)
+        {
+            return self::factory('pre', $content, ...$classes);
+        }
+
+        /**
+         * @param $content
+         * @param ...$classes
+         *
+         * @return Tag
+         */
+        public static function h1($content, ...$classes)
+        {
+            return self::factory('h1', $content, ...$classes);
+        }
+
+        /**
+         * @param $content
+         * @param ...$classes
+         *
+         * @return Tag
+         */
+        public static function h2($content, ...$classes)
+        {
+            return self::factory('h2', $content, ...$classes);
+        }
+
+        /**
+         * @param $content
+         * @param ...$classes
+         *
+         * @return Tag
+         */
+        public static function h3($content, ...$classes)
+        {
+            return self::factory('h3', $content, ...$classes);
+        }
+
+        /**
+         * @param $content
+         * @param ...$classes
+         *
+         * @return Tag
+         */
+        public static function h4($content, ...$classes)
+        {
+            return self::factory('h4', $content, ...$classes);
+        }
+
+        /**
+         * @param $content
+         * @param ...$classes
+         *
+         * @return Tag
+         */
+        public static function h5($content, ...$classes)
+        {
+            return self::factory('h5', $content, ...$classes);
+        }
+
+        /**
+         * @param $content
+         * @param ...$classes
+         *
+         * @return Tag
+         */
+        public static function h6($content, ...$classes)
+        {
+            return self::factory('h6', $content, ...$classes);
+        }
+
+        /**
+         * @param $content
+         * @param ...$classes
+         *
+         * @return Tag
+         */
+        public static function strong($content, ...$classes)
+        {
+            return self::factory('strong', $content, ...$classes);
+        }
+
+        /**
+         * @param $content
+         * @param ...$classes
+         *
+         * @return Tag
+         */
+        public static function i($content, ...$classes)
+        {
+            return self::factory('i', $content, ...$classes);
+        }
+
+        /**
+         * @param $content
+         * @param ...$classes
+         *
+         * @return Tag
+         */
+        public static function ul($content, ...$classes)
+        {
+            return self::factory('ul', $content, ...$classes);
+        }
+
+        /**
+         * @param $content
+         * @param ...$classes
+         *
+         * @return Tag
+         */
+        public static function li($content, ...$classes)
+        {
+            return self::factory('li', $content, ...$classes);
+        }
+
+        /**
+         * @param $content
+         * @param ...$classes
+         *
+         * @return Tag
+         */
+        public static function dd($content, ...$classes)
+        {
+            return self::factory('dd', $content, ...$classes);
+        }
+
+        /**
+         * @param $content
+         * @param ...$classes
+         *
+         * @return Tag
+         */
+        public static function dt($content, ...$classes)
+        {
+            return self::factory('dt', $content, ...$classes);
+        }
+
+        /**
+         * @param $content
+         * @param ...$classes
+         *
+         * @return Tag
+         */
+        public static function button($content, ...$classes)
+        {
+            return self::factory('button', $content, ...$classes);
+        }
+
+        /**
+         * @param $content
+         * @param ...$classes
+         *
+         * @return Tag
+         */
+        public static function nav($content, ...$classes)
+        {
+            return self::factory('nav', $content, ...$classes);
+        }
+
+        /**
+         * @param $content
+         * @param ...$classes
+         *
+         * @return Tag
+         */
+        public static function table($content, ...$classes)
+        {
+            return self::factory('table', $content, ...$classes);
+        }
+
+        /**
+         * @param $content
+         * @param ...$classes
+         *
+         * @return Tag
+         */
+        public static function tr($content, ...$classes)
+        {
+            return self::factory('tr', $content, ...$classes);
+        }
+
+        /**
+         * @param $content
+         * @param ...$classes
+         *
+         * @return Tag
+         */
+        public static function thead($content, ...$classes)
+        {
+            return self::factory('thead', $content, ...$classes);
+        }
+
+        /**
+         * @param $content
+         * @param ...$classes
+         *
+         * @return Tag
+         */
+        public static function tbody($content, ...$classes)
+        {
+            return self::factory('tbody', $content, ...$classes);
+        }
+
+        /**
+         * @param $content
+         * @param ...$classes
+         *
+         * @return Tag
+         */
+        public static function th($content, ...$classes)
+        {
+            return self::factory('th', $content, ...$classes);
+        }
+
+        /**
+         * @param $content
+         * @param ...$classes
+         *
+         * @return Tag
+         */
+        public static function td($content, ...$classes)
+        {
+            return self::factory('td', $content, ...$classes);
+        }
+
+        /**
          * @param $attribute
          *
          * @return mixed|null
@@ -119,6 +401,23 @@
         public function prepend(...$content)
         {
             $this->content->prepend(...$content);
+
+            return $this;
+        }
+
+        /**
+         * @param $content
+         *
+         * @return $this
+         */
+        public function dump($content)
+        {
+            $previous      = $this->content;
+            $this->content = $content;
+
+            echo $this->__toString();
+
+            $this->content = $previous;
 
             return $this;
         }
@@ -236,16 +535,31 @@
             return $this;
         }
 
+        /**
+         * @param mixed $offset
+         *
+         * @return bool
+         */
         public function offsetExists($offset)
         {
             return $this->attributes->has($offset);
         }
 
+        /**
+         * @param mixed $offset
+         *
+         * @return mixed|null
+         * @throws \ObjectivePHP\Primitives\Exception
+         */
         public function offsetGet($offset)
         {
             return $this->attributes->get($offset);
         }
 
+        /**
+         * @param mixed $offset
+         * @param mixed $value
+         */
         public function offsetSet($offset, $value)
         {
             switch ($offset)
@@ -261,6 +575,9 @@
             }
         }
 
+        /**
+         * @param mixed $offset
+         */
         public function offsetUnset($offset)
         {
             switch ($offset)
