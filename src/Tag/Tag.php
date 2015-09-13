@@ -104,7 +104,7 @@
          *
          * @return Tag
          */
-        public static function span($content, ...$classes)
+        public static function span($content = null, ...$classes)
         {
             return self::factory('span', $content, ...$classes);
         }
@@ -137,7 +137,7 @@
          *
          * @return Tag
          */
-        public static function a($content, $href, ...$classes)
+        public static function a($content = null, $href = null, ...$classes)
         {
             $a = self::factory('a', $content, ...$classes);
             $a->addAttribute('href', $href);
@@ -151,7 +151,7 @@
          *
          * @return Tag
          */
-        public static function pre($content, ...$classes)
+        public static function pre($content = null, ...$classes)
         {
             return self::factory('pre', $content, ...$classes);
         }
@@ -162,7 +162,7 @@
          *
          * @return Tag
          */
-        public static function h1($content, ...$classes)
+        public static function h1($content = null, ...$classes)
         {
             return self::factory('h1', $content, ...$classes);
         }
@@ -173,7 +173,7 @@
          *
          * @return Tag
          */
-        public static function h2($content, ...$classes)
+        public static function h2($content = null, ...$classes)
         {
             return self::factory('h2', $content, ...$classes);
         }
@@ -184,7 +184,7 @@
          *
          * @return Tag
          */
-        public static function h3($content, ...$classes)
+        public static function h3($content = null, ...$classes)
         {
             return self::factory('h3', $content, ...$classes);
         }
@@ -195,7 +195,7 @@
          *
          * @return Tag
          */
-        public static function h4($content, ...$classes)
+        public static function h4($content = null, ...$classes)
         {
             return self::factory('h4', $content, ...$classes);
         }
@@ -206,7 +206,7 @@
          *
          * @return Tag
          */
-        public static function h5($content, ...$classes)
+        public static function h5($content = null, ...$classes)
         {
             return self::factory('h5', $content, ...$classes);
         }
@@ -217,7 +217,7 @@
          *
          * @return Tag
          */
-        public static function h6($content, ...$classes)
+        public static function h6($content = null, ...$classes)
         {
             return self::factory('h6', $content, ...$classes);
         }
@@ -228,7 +228,7 @@
          *
          * @return Tag
          */
-        public static function strong($content, ...$classes)
+        public static function strong($content = null, ...$classes)
         {
             return self::factory('strong', $content, ...$classes);
         }
@@ -239,7 +239,7 @@
          *
          * @return Tag
          */
-        public static function i($content, ...$classes)
+        public static function i($content = null, ...$classes)
         {
             return self::factory('i', $content, ...$classes);
         }
@@ -250,7 +250,7 @@
          *
          * @return Tag
          */
-        public static function ul($content, ...$classes)
+        public static function ul($content = null, ...$classes)
         {
             return self::factory('ul', $content, ...$classes);
         }
@@ -261,7 +261,7 @@
          *
          * @return Tag
          */
-        public static function li($content, ...$classes)
+        public static function li($content = null, ...$classes)
         {
             return self::factory('li', $content, ...$classes);
         }
@@ -272,7 +272,7 @@
          *
          * @return Tag
          */
-        public static function dd($content, ...$classes)
+        public static function dd($content = null, ...$classes)
         {
             return self::factory('dd', $content, ...$classes);
         }
@@ -283,7 +283,7 @@
          *
          * @return Tag
          */
-        public static function dt($content, ...$classes)
+        public static function dt($content = null, ...$classes)
         {
             return self::factory('dt', $content, ...$classes);
         }
@@ -294,7 +294,7 @@
          *
          * @return Tag
          */
-        public static function button($content, ...$classes)
+        public static function button($content = null, ...$classes)
         {
             return self::factory('button', $content, ...$classes);
         }
@@ -305,7 +305,7 @@
          *
          * @return Tag
          */
-        public static function nav($content, ...$classes)
+        public static function nav($content = null, ...$classes)
         {
             return self::factory('nav', $content, ...$classes);
         }
@@ -316,7 +316,7 @@
          *
          * @return Tag
          */
-        public static function table($content, ...$classes)
+        public static function table($content = null, ...$classes)
         {
             return self::factory('table', $content, ...$classes);
         }
@@ -327,7 +327,7 @@
          *
          * @return Tag
          */
-        public static function tr($content, ...$classes)
+        public static function tr($content = null, ...$classes)
         {
             return self::factory('tr', $content, ...$classes);
         }
@@ -338,7 +338,7 @@
          *
          * @return Tag
          */
-        public static function thead($content, ...$classes)
+        public static function thead($content = null, ...$classes)
         {
             return self::factory('thead', $content, ...$classes);
         }
@@ -349,7 +349,7 @@
          *
          * @return Tag
          */
-        public static function tbody($content, ...$classes)
+        public static function tbody($content = null, ...$classes)
         {
             return self::factory('tbody', $content, ...$classes);
         }
@@ -360,7 +360,7 @@
          *
          * @return Tag
          */
-        public static function th($content, ...$classes)
+        public static function th($content = null, ...$classes)
         {
             return self::factory('th', $content, ...$classes);
         }
@@ -371,7 +371,7 @@
          *
          * @return Tag
          */
-        public static function td($content, ...$classes)
+        public static function td($content = null, ...$classes)
         {
             return self::factory('td', $content, ...$classes);
         }
@@ -384,7 +384,7 @@
          */
         public function getAttribute($attribute)
         {
-            return $this->attributes->get($attribute, null);
+            return $this->attributes->get($attribute);
         }
 
         /**
