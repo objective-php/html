@@ -37,6 +37,16 @@
         protected $separator = ' ';
 
         /**
+         * @var bool
+         */
+        protected $dumped = false;
+
+        /**
+         * @var bool
+         */
+        protected $close = false;
+
+        /**
          * @param null $content
          */
         public function __construct($content = null)
@@ -44,7 +54,7 @@
             $this->attributes = new Attributes;
             $this->content    = new Collection;
 
-            $this->append($content);
+            if(!is_null($content)) $this->append($content);
         }
 
         /**
@@ -74,13 +84,16 @@
          *
          * @return $this
          */
-        public static function factory($tag, $content, ...$classes)
+        public static function factory($tag, $content = null, ...$classes)
         {
 
             $tag = (new self())->setTag($tag);
 
-            $content = Collection::cast($content)->toArray();
-            $tag->append(...$content);
+            if(!is_null($content))
+            {
+                $content = Collection::cast($content)->toArray();
+                $tag->append(...$content);
+            }
 
             $tag->addClass(...$classes);
 
@@ -96,6 +109,28 @@
         public static function div($content = null, ...$classes)
         {
             return self::factory('div', $content, ...$classes);
+        }
+
+        /**
+         * @param $content
+         * @param ...$classes
+         *
+         * @return Tag
+         */
+        public static function p($content = null, ...$classes)
+        {
+            return self::factory('p', $content, ...$classes);
+        }
+
+        /**
+         * @param $content
+         * @param ...$classes
+         *
+         * @return Tag
+         */
+        public static function code($content = null, ...$classes)
+        {
+            return self::factory('code', $content, ...$classes);
         }
 
         /**
@@ -410,14 +445,20 @@
          *
          * @return $this
          */
-        public function dump($content)
+        public function dump($content = null)
         {
-            $previous      = $this->content;
-            $this->content = $content;
 
+            if(!is_null($content))
+            {
+                $previous      = $this->content;
+                $this->content = $content;
+            }
             echo $this->__toString();
 
-            $this->content = $previous;
+            if(!is_null($content))
+            {
+                $this->content = $previous;
+            }
 
             return $this;
         }
@@ -429,23 +470,33 @@
         public function __toString()
         {
 
-            $html = '<' . trim(implode(' ', [$this->getTag(), $this->getAttributes()])) . '>';
-
-            $chunks = new Collection();
-            if (!$this->content->isEmpty())
+            if($this->close)
             {
-                $this->content->each(function ($chunk) use (&$chunks)
+                $this->close = false;
+                return '</' . $this->getTag() . '>';
+            }
+            else
+            {
+                $html = '<' . trim(implode(' ', [$this->getTag(), $this->getAttributes()])) . '>';
+
+                $chunks = new Collection();
+                if (!$this->content->isEmpty())
                 {
-                    $chunks[] = (string) $chunk;
-                });
+                    $this->content->each(function ($chunk) use (&$chunks)
+                    {
+                        $chunks[] = (string) $chunk;
+                    });
 
-                $html .= $chunks->join($this->getSeparator())->trim();
+                    $html .= $chunks->join($this->getSeparator())->trim();
 
-                $html .= '</' . $this->getTag() . '>';
+                    $html .= '</' . $this->getTag() . '>';
+                }
+
+                // mark tag as dumped to prevent auto dump on destruction
+                $this->dumped = true;
             }
 
             return $html;
-
         }
 
         /**
@@ -654,9 +705,25 @@
             return $this;
         }
 
+        /**
+         * @return string
+         */
         public function close()
         {
-            return '</' . $this->getTag() . '>';
+            $this->close = true;
+
+            return $this;
         }
 
+        /**
+         * If the tag has not been explicitly dumped,
+         * do it automatically on destruction
+         */
+        public function __destruct()
+        {
+            if(!$this->dumped)
+            {
+                echo $this->__toString();
+            }
+        }
     }
