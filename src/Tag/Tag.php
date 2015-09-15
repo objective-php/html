@@ -412,6 +412,17 @@
         }
 
         /**
+         * @param $content
+         * @param ...$classes
+         *
+         * @return Tag
+         */
+        public static function small($content = null, ...$classes)
+        {
+            return self::factory('td', $content, ...$classes);
+        }
+
+        /**
          * @param $attribute
          *
          * @return mixed|null
