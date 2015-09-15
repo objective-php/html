@@ -29,7 +29,7 @@
         /**
          * @var string
          */
-        protected $tag;
+        protected $tag = 'div';
 
         /**
          * @var string

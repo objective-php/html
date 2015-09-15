@@ -16,11 +16,12 @@
     }
   ],
   "require": {
-    "php": ">=5.6.0"
+    "php": ">=5.6.0",
+    "objective-php/primitives": "dev-master",
+    "erusev/parsedown": "~1.5"
   },
   "require-dev": {
     "objective-php/phpunit-extension": "1.0",
-    "objective-php/primitives": "dev-master",
     "phpunit/phpunit": "4.*"
   },
   "autoload": {
