@@ -470,6 +470,9 @@
         public function __toString()
         {
 
+            // mark tag as dumped to prevent auto dump on destruction
+            $this->dumped = true;
+
             if($this->close)
             {
                 $this->close = false;
@@ -492,8 +495,6 @@
                     $html .= '</' . $this->getTag() . '>';
                 }
 
-                // mark tag as dumped to prevent auto dump on destruction
-                $this->dumped = true;
             }
 
             return $html;
