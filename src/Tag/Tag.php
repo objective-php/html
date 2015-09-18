@@ -629,7 +629,8 @@
             {
                 case 'class':
                     $this->attributes['class']->clear();
-                    $this->addClass($value);
+                    if(!is_array($value)) $value = [$value];
+                    $this->addClass(...$value);
                     break;
 
                 default:
