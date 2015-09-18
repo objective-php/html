@@ -629,7 +629,7 @@
             {
                 case 'class':
                     $this->attributes['class']->clear();
-                    $this->addClass(...$value);
+                    $this->addClass($value);
                     break;
 
                 default:
