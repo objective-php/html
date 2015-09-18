@@ -1,19 +1,13 @@
 <?php
-    /**
-     * Created by PhpStorm.
-     * User: gauthier
-     * Date: 15/09/15
-     * Time: 17:25
-     */
-    
+
     namespace ObjectivePHP\Html\Markdown;
 
 
-    /**
-     * Class Md
-     *
-     * @package ObjectivePHP\Html\Markdown
-     */
+        /**
+         * Class Md
+         *
+         * @package ObjectivePHP\Html\Markdown
+         */
     /**
      * Class Md
      *
@@ -26,21 +20,24 @@
          */
         protected $content;
 
+        protected $dumped = false;
+
         /**
          * @param null $markdown
          */
         public function __construct($markdown = null)
         {
-            if(!is_null($markdown)) $this->parse($markdown);
+            if (!is_null($markdown)) $this->content = \Parsedown::instance()->text($markdown);
         }
 
         /**
          * @param $markdown
          *
          * @return Md
-         */public static function parse($markdown)
+         */
+        public static function parse($markdown)
         {
-            return new self(\Parsedown::instance()->text($markdown));
+            return new self($markdown);
         }
 
         /**
@@ -60,14 +57,6 @@
         }
 
         /**
-         * @return mixed
-         */
-        public function __toString()
-        {
-            return $this->content;
-        }
-
-        /**
          * If the tag has not been explicitly dumped,
          * do it automatically on destruction
          */
@@ -77,5 +66,14 @@
             {
                 echo $this->__toString();
             }
+        }
+
+        /**
+         * @return mixed
+         */
+        public function __toString()
+        {
+            $this->dumped = true;
+            return $this->content;
         }
     }
