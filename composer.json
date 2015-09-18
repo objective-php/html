@@ -19,7 +19,7 @@
     "php": ">=5.6.0",
     "objective-php/primitives": "dev-master",
     "erusev/parsedown": "~1.5",
-    "erusev/parsedown-extra": "~1.5"
+    "erusev/parsedown-extra": "~0.7"
   },
   "require-dev": {
     "objective-php/phpunit-extension": "1.0",
