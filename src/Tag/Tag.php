@@ -5,6 +5,8 @@
     
     use ObjectivePHP\Html\Attributes\Attributes;
     use ObjectivePHP\Html\Exception;
+    use ObjectivePHP\Html\Tag\Renderer\DefaultTagRenderer;
+    use ObjectivePHP\Html\Tag\Renderer\TagRendererInterface;
     use ObjectivePHP\Primitives\Collection\Collection;
     use ObjectivePHP\Primitives\Merger\MergePolicy;
 
@@ -44,7 +46,22 @@
         /**
          * @var bool
          */
+        protected $autoDump = true;
+
+        /**
+         * @var bool
+         */
         protected $close = false;
+
+        /**
+         * @var bool
+         */
+        protected $alwaysClosed = false;
+
+        /**
+         * @var TagRendererInterface
+         */
+        protected $renderer;
 
         /**
          * @param null $content
@@ -53,8 +70,9 @@
         {
             $this->attributes = new Attributes;
             $this->content    = new Collection;
+            $this->renderer   = new DefaultTagRenderer();
 
-            if(!is_null($content)) $this->append($content);
+            if (!is_null($content)) $this->append($content);
         }
 
         /**
@@ -87,9 +105,9 @@
         public static function factory($tag, $content = null, ...$classes)
         {
 
-            $tag = (new self())->setTag($tag);
+            $tag = (new static())->setTag($tag);
 
-            if(!is_null($content))
+            if (!is_null($content))
             {
                 $content = Collection::cast($content)->toArray();
                 $tag->append(...$content);
@@ -178,6 +196,21 @@
             $a->addAttribute('href', $href);
 
             return $a;
+        }
+
+        /**
+         * @param $content
+         * @param ...$classes
+         *
+         * @return Tag
+         */
+        public static function form($action = '', $method = 'POST')
+        {
+            $form = self::factory('form');
+            $form->addAttribute('action', $action);
+            $form->addAttribute('method', $method);
+
+            return $form;
         }
 
         /**
@@ -459,14 +492,15 @@
         public function dump($content = null)
         {
 
-            if(!is_null($content))
+            if (!is_null($content))
             {
                 $previous      = $this->content;
                 $this->content = $content;
             }
+
             echo $this->__toString();
 
-            if(!is_null($content))
+            if (!is_null($content))
             {
                 $this->content = $previous;
             }
@@ -484,29 +518,7 @@
             // mark tag as dumped to prevent auto dump on destruction
             $this->dumped = true;
 
-            if($this->close)
-            {
-                $this->close = false;
-                return '</' . $this->getTag() . '>';
-            }
-            else
-            {
-                $html = '<' . trim(implode(' ', [$this->getTag(), $this->getAttributes()])) . '>';
-
-                $chunks = new Collection();
-                if (!$this->content->isEmpty())
-                {
-                    $this->content->each(function ($chunk) use (&$chunks)
-                    {
-                        $chunks[] = (string) $chunk;
-                    });
-
-                    $html .= $chunks->join($this->getSeparator())->trim();
-
-                    $html .= '</' . $this->getTag() . '>';
-                }
-
-            }
+            $html = $this->renderer->render($this);
 
             return $html;
         }
@@ -527,8 +539,21 @@
                     $this->attributes->set($attribute, $value);
                     break;
 
+                case MergePolicy::COMBINE:
+
+                    $previousValue = $this->attributes->get($attribute);
+                    if ($previousValue)
+                    {
+                        $combinedValue = Collection::cast($previousValue)->merge(Collection::cast($value));
+                    }
+                    else
+                    {
+                        $combinedValue = $value;
+                    }
+                    $this->attributes->set($attribute, $combinedValue);
+                    break;
                 default:
-                    throw new Exception('Only MergePolicy::REPLACE is implemented yet');
+                    throw new Exception('Only MergePolicy::REPLACE and COMBINE are implemented yet');
 
             }
 
@@ -629,7 +654,7 @@
             {
                 case 'class':
                     $this->attributes['class']->clear();
-                    if(!is_array($value)) $value = [$value];
+                    if (!is_array($value)) $value = [$value];
                     $this->addClass(...$value);
                     break;
 
@@ -691,6 +716,22 @@
         }
 
         /**
+         * @param       $attributes
+         * @param array $mergePolicies
+         *
+         * @throws \ObjectivePHP\Primitives\Exception
+         */
+        public function addAttributes($attributes, $mergePolicies = [])
+        {
+            Collection::cast($attributes)->each(function ($value, $attribute) use ($mergePolicies)
+            {
+                $mergePolicy = isset($mergePolicies[$attribute]) ? $mergePolicies[$attribute] : MergePolicy::REPLACE;
+                $this->addAttribute($attribute, $value, $mergePolicy);
+            })
+            ;
+        }
+
+        /**
          * @return Attributes
          */
         public function getAttributes()
@@ -721,9 +762,68 @@
         /**
          * @return string
          */
-        public function close()
+        public function close($switch = true)
         {
-            $this->close = true;
+            $this->close = $switch;
+
+            return $this;
+        }
+
+        /**
+         * @return bool
+         */
+        public function isClosingTag()
+        {
+            return $this->close;
+        }
+
+        public function alwaysClose($switch = true)
+        {
+            $this->alwaysClosed = (bool) $switch;
+        }
+
+        public function isAlwaysClosed()
+        {
+            return $this->alwaysClosed;
+        }
+
+        /**
+         * @return TagRendererInterface
+         */
+        public function getRenderer()
+        {
+            return $this->renderer;
+        }
+
+        /**
+         * @param TagRendererInterface $renderer
+         *
+         * @return $this
+         */
+        public function setRenderer(TagRendererInterface $renderer)
+        {
+            $this->renderer = $renderer;
+
+            return $this;
+        }
+
+
+        /**
+         * @return $this
+         */
+        public function enableAutoDump()
+        {
+            $this->autoDump = true;
+
+            return $this;
+        }
+
+        /**
+         * @return $this
+         */
+        public function disableAutoDump()
+        {
+            $this->autoDump = false;
 
             return $this;
         }
@@ -734,7 +834,7 @@
          */
         public function __destruct()
         {
-            if(!$this->dumped)
+            if (!$this->dumped && $this->autoDump)
             {
                 echo $this->__toString();
             }

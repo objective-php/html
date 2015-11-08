@@ -17,4 +17,16 @@
             $this->assertEquals('a="x" b="y z" disabled', (string) $attribs);
         }
 
+        public function testBooleanAttributes()
+        {
+            $attribs = new Attributes();
+
+            $attribs->set('a', true)->set('b', false)->append('disabled');
+
+            $this->assertEquals('a disabled', (string) $attribs);
+
+            $attribs->set('a', false);
+            $this->assertEquals('disabled', (string) $attribs);
+        }
+
     }

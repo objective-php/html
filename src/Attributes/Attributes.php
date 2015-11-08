@@ -37,11 +37,13 @@
                 if ($set instanceof Collection)
                 {
                     $set->clear()->append($value);
+
                     return $this;
                 }
             }
 
             parent::set($attribute, $value);
+
             return $this;
         }
 
@@ -52,12 +54,15 @@
             $this->each(function ($value, $attribute) use (&$flattenedAttributes)
             {
                 // skip empty collections
-                if($value instanceof Collection && $value->isEmpty()) return;
+                if ($value instanceof Collection && $value->isEmpty()) return;
 
-
-                if (is_int($attribute))
+                if(is_int($attribute))
                 {
                     $flattenedAttributes[] = $value;
+                }
+                else if (is_bool($value))
+                {
+                    if($value === true) $flattenedAttributes[] = $attribute;
                 }
                 else $flattenedAttributes[] = $attribute . '="' . Collection::cast($value)->join(' ') . '"';
             });
