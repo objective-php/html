@@ -88,9 +88,10 @@
          */
         public static function select($name, $options = null, ...$classes)
         {
-            $input = Select::factory('select', $options, ...$classes);
+            $input = Select::factory('select', null, ...$classes);
             $input->alwaysClose();
             $input->addAttributes(['name' => $name]);
+            if($options) $input->addOptions($options);
 
             return $input;
         }
