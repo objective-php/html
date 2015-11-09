@@ -214,6 +214,21 @@
         }
 
         /**
+         * @param $label
+         * @param $for
+         *
+         * @return Tag
+         * @throws Exception
+         */
+        public static function label($label, $for)
+        {
+            $label = self::factory('label', $label);
+            $label->addAttribute('for', $for);
+
+            return $label;
+        }
+
+        /**
          * @param $content
          * @param ...$classes
          *
@@ -366,6 +381,7 @@
         {
             return self::factory('button', $content, ...$classes);
         }
+
 
         /**
          * @param $content
@@ -558,6 +574,51 @@
             }
 
             return $this;
+        }
+
+        /**
+         * Id attribute shortcut
+         *
+         * @param null $id
+         */
+        public function id($id = null)
+        {
+            if (!is_null($id))
+            {
+                return $this->addAttribute('id', $id);
+            }
+
+            return $this->getAttribute('id');
+        }
+
+        /**
+         * Name attribute shortcut
+         *
+         * @param null $name
+         */
+        public function name($name = null)
+        {
+            if (!is_null($name))
+            {
+                return $this->addAttribute('name', $name);
+            }
+
+            return $this->getAttribute('name');
+        }
+
+        /**
+         * Name attribute shortcut
+         *
+         * @param null $name
+         */
+        public function data($name, $value)
+        {
+            if (!is_null($value))
+            {
+                return $this->addAttribute('data-' . $name, $value);
+            }
+
+            return $this->getAttribute('data-' . $name);
         }
 
         /**

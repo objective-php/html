@@ -5,6 +5,7 @@
     
     use ObjectivePHP\Html\Tag\Tag;
     use ObjectivePHP\Primitives\Collection\Collection;
+    use ObjectivePHP\Primitives\Merger\MergePolicy;
 
     class Input extends Tag
     {
@@ -35,17 +36,30 @@
             $this->setRenderer(new InputTagRenderer());
         }
 
+        public function addAttribute($attribute, $value, $mergePolicy = MergePolicy::REPLACE)
+        {
+            parent::addAttribute($attribute, $value, $mergePolicy);
+
+            if(strtolower($attribute) == 'id' && !$this->getAttribute('name'))
+            {
+                parent::addAttribute('name', $value);
+            }
+
+            return $this;
+        }
+
+
         /**
          * @param $name
          * @param ...$classes
          *
          * @return $this
          */
-        public static function text($name, ...$classes)
+        public static function text($id, ...$classes)
         {
             $input = static::factory('input', null, ...$classes);
 
-            $input->addAttributes(['type' => 'text', 'name' => $name]);
+            $input->addAttributes(['type' => 'text', 'id' => $id]);
 
             return $input;
         }
@@ -56,11 +70,11 @@
          *
          * @return $this
          */
-        public static function date($name, ...$classes)
+        public static function password($id, ...$classes)
         {
             $input = static::factory('input', null, ...$classes);
 
-            $input->addAttributes(['type' => 'date', 'name' => $name]);
+            $input->addAttributes(['type' => 'password', 'id' => $id]);
 
             return $input;
         }
@@ -71,11 +85,26 @@
          *
          * @return $this
          */
-        public static function textarea($name, ...$classes)
+        public static function date($id, ...$classes)
+        {
+            $input = static::factory('input', null, ...$classes);
+
+            $input->addAttributes(['type' => 'date', 'id' => $id]);
+
+            return $input;
+        }
+
+        /**
+         * @param $name
+         * @param ...$classes
+         *
+         * @return $this
+         */
+        public static function textarea($id, ...$classes)
         {
             $input = static::factory('textarea', null, ...$classes);
             $input->alwaysClose();
-            $input->addAttributes(['name' => $name]);
+            $input->addAttributes(['id' => $id]);
 
             return $input;
         }
@@ -86,12 +115,12 @@
          *
          * @return Select
          */
-        public static function select($name, $options = null, ...$classes)
+        public static function select($id, $options = null, ...$classes)
         {
             $input = Select::factory('select', null, ...$classes);
             $input->alwaysClose();
-            $input->addAttributes(['name' => $name]);
-            if($options) $input->addOptions($options);
+            $input->addAttributes(['id' => $id]);
+            if ($options) $input->addOptions($options);
 
             return $input;
         }
@@ -99,7 +128,7 @@
         public static function option($value, $label = null)
         {
 
-            if(is_null($label))
+            if (is_null($label))
             {
                 $label = $value;
                 $value = null;
@@ -107,7 +136,7 @@
 
             $option = Option::factory('option', $label);
 
-            if($value)
+            if ($value)
             {
                 $option->addAttribute('value', $value);
             }
@@ -121,11 +150,11 @@
          *
          * @return $this
          */
-        public static function checkbox($name, $value = "1", ...$classes)
+        public static function checkbox($id, $value = "1", ...$classes)
         {
             $input = static::factory('input', null, ...$classes);
 
-            $input->addAttributes(['type' => 'checkbox', 'name' => $name, 'value' => $value]);
+            $input->addAttributes(['type' => 'checkbox', 'id' => $id, 'value' => $value]);
 
             return $input;
         }
@@ -136,13 +165,39 @@
          *
          * @return $this
          */
-        public static function radio($name, $value, ...$classes)
+        public static function radio($id, $value, ...$classes)
         {
             $input = static::factory('input', null, ...$classes);
 
-            $input->addAttributes(['type' => 'radio', 'name' => $name, 'value' => $value]);
+            $input->addAttributes(['type' => 'radio', 'id' => $id, 'value' => $value]);
 
             return $input;
+        }
+
+
+        public static function submit($label, ...$classes)
+        {
+            $button = static::factory('input', null, ...$classes);
+            $button->addAttribute('type', 'submit');
+            $button->addAttribute('value', $label);
+
+            return $button;
+        }
+
+        /**
+         * Value attribute shortcut
+         *
+         * @param null $value
+         */
+        public function value($value = null)
+        {
+            if (!is_null($value))
+            {
+                // TODO sanitize value
+                return $this->addAttribute('value', $value);
+            }
+
+            return $this->getAttribute('value');
         }
 
         /**
@@ -166,6 +221,11 @@
 
                     switch ($this->getAttribute('type'))
                     {
+
+                        case 'password':
+                            // do not restore password value
+                            break;
+
                         case 'checkbox':
                             if (!$this->getAttribute('checked') && $this->getData()->has($name))
                             {
@@ -200,17 +260,18 @@
                     break;
 
                 case 'select':
-                    if($this->getData()->has($name))
+                    if ($this->getData()->has($name))
                     {
                         $dataValue = Collection::cast($this->getData()->get($name));
-                        $this->getContent()->each(function(Input $option) use($dataValue)
+                        $this->getContent()->each(function (Input $option) use ($dataValue)
                         {
                             $optionValue = $option->getAttribute('value') ?: $option->getContent()->join('');
-                            if($dataValue->contains($optionValue))
+                            if ($dataValue->contains($optionValue))
                             {
                                 $option->addAttribute('selected', true);
                             }
-                        });
+                        })
+                        ;
                     }
                     break;
             }
@@ -247,6 +308,5 @@
         {
             self::$dateDefaultFormat = $dateDefaultFormat;
         }
-
 
     }
