@@ -3,6 +3,7 @@
     namespace ObjectivePHP\Html\Tag\Input;
     
     
+    use ObjectivePHP\Html\Message\MessageStack;
     use ObjectivePHP\Html\Tag\Tag;
     use ObjectivePHP\Primitives\Collection\Collection;
     use ObjectivePHP\Primitives\Merger\MergePolicy;
@@ -22,6 +23,11 @@
          * @var string
          */
         protected static $dateDefaultFormat = 'd/m/Y';
+
+        /**
+         * @var MessageStack
+         */
+        protected static $errors;
 
         /**
          * @var string
@@ -200,6 +206,37 @@
             return $this->getAttribute('value');
         }
 
+
+        public static function errors($input, callable $renderer = null)
+        {
+            if(!$messages = self::$errors)
+            {
+                // no messages at all
+                return;
+            }
+
+            if(!$messages->has($input))
+            {
+                // no message for this input
+                return;
+            }
+
+            // render errors using external renderer
+            if($renderer)
+            {
+                return $renderer($input, $messages->get($input), $messages);
+            }
+
+            $errors = Tag::ul();
+            foreach($messages->get($input) as $message)
+            {
+                $errors->append(Tag::li($message, 'message-' . $message->getType()));
+            }
+
+            return $errors;
+
+        }
+
         /**
          * @throws \ObjectivePHP\Html\Exception
          * @throws \ObjectivePHP\Primitives\Exception
@@ -291,6 +328,22 @@
         public static function setData($data)
         {
             self::$data = Collection::cast($data);
+        }
+
+        /**
+         * @return MessageStack
+         */
+        public static function getErrors()
+        {
+            return self::$errors;
+        }
+
+        /**
+         * @param MessageStack $errors
+         */
+        public static function setErrors(MessageStack $errors)
+        {
+            self::$errors = $errors;
         }
 
         /**
