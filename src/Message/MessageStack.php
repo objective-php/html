@@ -8,11 +8,6 @@
     class MessageStack extends Collection
     {
 
-        /**
-         * @var Collection
-         */
-        protected $messages;
-
         public function __construct($messages = [])
         {
             parent::__construct($messages);
@@ -30,8 +25,7 @@
         {
             if(is_null($type))
             {
-                $count = $this->messages->count();
-
+                $count = parent::count();
             }
             else
             {

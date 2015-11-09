@@ -341,8 +341,10 @@
         /**
          * @param MessageStack $errors
          */
-        public static function setErrors(MessageStack $errors)
+        public static function setErrors(Collection $errors)
         {
+            // check errors content
+            $errors->restrictTo(MessageStack::class);
             self::$errors = $errors;
         }
 
