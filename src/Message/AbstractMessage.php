@@ -25,5 +25,9 @@
             return $this->type;
         }
 
+        public function __toString()
+        {
+            return (string) $this->message;
+        }
 
     }
