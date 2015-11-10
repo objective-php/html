@@ -606,6 +606,39 @@
             return $this->getAttribute('name');
         }
 
+
+        /**
+         * Width attribute shortcut
+         *
+         * @param null $width
+         */
+        public function width($width = null)
+        {
+            if (!is_null($width))
+            {
+                return $this->addAttribute('width', $width);
+            }
+
+            return $this->getAttribute('width');
+        }
+
+        /**
+         * Style attribute shortcut
+         *
+         * @param null $style
+         */
+        public function style($style = null)
+        {
+            if (!is_null($style))
+            {
+                return $this->addAttribute('style', $style);
+            }
+
+            return $this->getAttribute('style');
+        }
+
+
+
         /**
          * Name attribute shortcut
          *

@@ -227,7 +227,7 @@
                 return $renderer($input, $messages->get($input), $messages);
             }
 
-            $errors = Tag::ul();
+            $errors = Tag::ul()->addClass('form-field-error');
             foreach($messages->get($input) as $message)
             {
                 $errors->append(Tag::li($message, 'message-' . $message->getType()));

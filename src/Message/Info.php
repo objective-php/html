@@ -3,7 +3,7 @@
     namespace ObjectivePHP\Html\Message;
     
     
-    class Warning extends AbstractMessage
+    class Info extends AbstractMessage
     {
-        protected $type = 'warning';
+        protected $type = 'info';
     }
