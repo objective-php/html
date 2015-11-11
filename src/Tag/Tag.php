@@ -468,7 +468,7 @@
          */
         public static function small($content = null, ...$classes)
         {
-            return self::factory('td', $content, ...$classes);
+            return self::factory('small', $content, ...$classes);
         }
 
         /**
