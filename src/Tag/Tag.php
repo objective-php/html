@@ -19,6 +19,11 @@
     {
 
         /**
+         * @var Collection
+         */
+        protected static $decorators;
+
+        /**
          * @var Attributes
          */
         protected $attributes;
@@ -26,7 +31,7 @@
         /**
          * @var Collection
          */
-        protected $content;
+        protected $content = '';
 
         /**
          * @var string
@@ -90,7 +95,9 @@
                 $content = array_shift($parameters);
             }
 
-            return self::factory($tag, $content, ...$parameters);
+            $tag = self::factory($tag, $content, ...$parameters);
+
+            return self::decorate($tag);
         }
 
         /**
@@ -105,6 +112,9 @@
         public static function factory($tag, $content = null, ...$classes)
         {
 
+            /**
+             * @var $tag Tag
+             */
             $tag = (new static())->setTag($tag);
 
             if (!is_null($content))
@@ -119,6 +129,37 @@
         }
 
         /**
+         * @param $tag
+         *
+         * @throws \ObjectivePHP\Primitives\Exception
+         */
+        protected static function decorate($tag)
+        {
+            if ($decorators = self::$decorators)
+            {
+                $decorators->each(function ($decorator) use ($tag)
+                {
+                    $decorator($tag);
+                });
+            }
+
+            return $tag;
+        }
+
+        /**
+         * @return Collection
+         */
+        public static function getDecorators()
+        {
+            if (is_null(self::$decorators))
+            {
+                self::$decorators = new Collection();
+            }
+
+            return self::$decorators;
+        }
+
+        /**
          * @param $content
          * @param ...$classes
          *
@@ -126,7 +167,9 @@
          */
         public static function div($content = null, ...$classes)
         {
-            return self::factory('div', $content, ...$classes);
+            $tag = self::factory('div', $content, ...$classes);
+
+            return self::decorate($tag);
         }
 
         /**
@@ -137,7 +180,9 @@
          */
         public static function p($content = null, ...$classes)
         {
-            return self::factory('p', $content, ...$classes);
+            $tag = self::factory('p', $content, ...$classes);
+
+            return self::decorate($tag);
         }
 
         /**
@@ -148,7 +193,9 @@
          */
         public static function code($content = null, ...$classes)
         {
-            return self::factory('code', $content, ...$classes);
+            $tag = self::factory('code', $content, ...$classes);
+
+            return self::decorate($tag);
         }
 
         /**
@@ -159,7 +206,9 @@
          */
         public static function span($content = null, ...$classes)
         {
-            return self::factory('span', $content, ...$classes);
+            $tag = self::factory('span', $content, ...$classes);
+
+            return self::decorate($tag);
         }
 
         /**
@@ -170,7 +219,9 @@
          */
         public static function br()
         {
-            return self::factory('br', null);
+            $tag = self::factory('br', null);
+
+            return self::decorate($tag);
         }
 
         /**
@@ -181,7 +232,9 @@
          */
         public static function hr()
         {
-            return self::factory('hr', null);
+            $tag = self::factory('hr', null);
+
+            return self::decorate($tag);
         }
 
         /**
@@ -236,7 +289,9 @@
          */
         public static function pre($content = null, ...$classes)
         {
-            return self::factory('pre', $content, ...$classes);
+            $tag = self::factory('pre', $content, ...$classes);
+
+            return self::decorate($tag);
         }
 
         /**
@@ -247,7 +302,9 @@
          */
         public static function h1($content = null, ...$classes)
         {
-            return self::factory('h1', $content, ...$classes);
+            $tag = self::factory('h1', $content, ...$classes);
+
+            return self::decorate($tag);
         }
 
         /**
@@ -258,7 +315,9 @@
          */
         public static function h2($content = null, ...$classes)
         {
-            return self::factory('h2', $content, ...$classes);
+            $tag = self::factory('h2', $content, ...$classes);
+
+            return self::decorate($tag);
         }
 
         /**
@@ -269,7 +328,9 @@
          */
         public static function h3($content = null, ...$classes)
         {
-            return self::factory('h3', $content, ...$classes);
+            $tag = self::factory('h3', $content, ...$classes);
+
+            return self::decorate($tag);
         }
 
         /**
@@ -280,7 +341,9 @@
          */
         public static function h4($content = null, ...$classes)
         {
-            return self::factory('h4', $content, ...$classes);
+            $tag = self::factory('h4', $content, ...$classes);
+
+            return self::decorate($tag);
         }
 
         /**
@@ -291,7 +354,9 @@
          */
         public static function h5($content = null, ...$classes)
         {
-            return self::factory('h5', $content, ...$classes);
+            $tag = self::factory('h5', $content, ...$classes);
+
+            return self::decorate($tag);
         }
 
         /**
@@ -302,7 +367,9 @@
          */
         public static function h6($content = null, ...$classes)
         {
-            return self::factory('h6', $content, ...$classes);
+            $tag = self::factory('h6', $content, ...$classes);
+
+            return self::decorate($tag);
         }
 
         /**
@@ -313,7 +380,9 @@
          */
         public static function strong($content = null, ...$classes)
         {
-            return self::factory('strong', $content, ...$classes);
+            $tag = self::factory('strong', $content, ...$classes);
+
+            return self::decorate($tag);
         }
 
         /**
@@ -324,7 +393,9 @@
          */
         public static function i($content = null, ...$classes)
         {
-            return self::factory('i', $content, ...$classes);
+            $tag = self::factory('i', $content, ...$classes);
+
+            return self::decorate($tag);
         }
 
         /**
@@ -335,7 +406,9 @@
          */
         public static function ul($content = null, ...$classes)
         {
-            return self::factory('ul', $content, ...$classes);
+            $tag = self::factory('ul', $content, ...$classes);
+
+            return self::decorate($tag);
         }
 
         /**
@@ -346,7 +419,9 @@
          */
         public static function li($content = null, ...$classes)
         {
-            return self::factory('li', $content, ...$classes);
+            $tag = self::factory('li', $content, ...$classes);
+
+            return self::decorate($tag);
         }
 
         /**
@@ -357,7 +432,9 @@
          */
         public static function dd($content = null, ...$classes)
         {
-            return self::factory('dd', $content, ...$classes);
+            $tag = self::factory('dd', $content, ...$classes);
+
+            return self::decorate($tag);
         }
 
         /**
@@ -368,7 +445,9 @@
          */
         public static function dt($content = null, ...$classes)
         {
-            return self::factory('dt', $content, ...$classes);
+            $tag = self::factory('dt', $content, ...$classes);
+
+            return self::decorate($tag);
         }
 
         /**
@@ -379,7 +458,9 @@
          */
         public static function button($content = null, ...$classes)
         {
-            return self::factory('button', $content, ...$classes);
+            $tag = self::factory('button', $content, ...$classes);
+
+            return self::decorate($tag);
         }
 
 
@@ -391,7 +472,9 @@
          */
         public static function nav($content = null, ...$classes)
         {
-            return self::factory('nav', $content, ...$classes);
+            $tag = self::factory('nav', $content, ...$classes);
+
+            return self::decorate($tag);
         }
 
         /**
@@ -402,7 +485,9 @@
          */
         public static function table($content = null, ...$classes)
         {
-            return self::factory('table', $content, ...$classes);
+            $tag = self::factory('table', $content, ...$classes);
+
+            return self::decorate($tag);
         }
 
         /**
@@ -413,7 +498,9 @@
          */
         public static function tr($content = null, ...$classes)
         {
-            return self::factory('tr', $content, ...$classes);
+            $tag = self::factory('tr', $content, ...$classes);
+
+            return self::decorate($tag);
         }
 
         /**
@@ -424,7 +511,9 @@
          */
         public static function thead($content = null, ...$classes)
         {
-            return self::factory('thead', $content, ...$classes);
+            $tag = self::factory('thead', $content, ...$classes);
+
+            return self::decorate($tag);
         }
 
         /**
@@ -435,7 +524,9 @@
          */
         public static function tbody($content = null, ...$classes)
         {
-            return self::factory('tbody', $content, ...$classes);
+            $tag = self::factory('tbody', $content, ...$classes);
+
+            return self::decorate($tag);
         }
 
         /**
@@ -446,7 +537,9 @@
          */
         public static function th($content = null, ...$classes)
         {
-            return self::factory('th', $content, ...$classes);
+            $tag = self::factory('th', $content, ...$classes);
+
+            return self::decorate($tag);
         }
 
         /**
@@ -457,7 +550,9 @@
          */
         public static function td($content = null, ...$classes)
         {
-            return self::factory('td', $content, ...$classes);
+            $tag = self::factory('td', $content, ...$classes);
+
+            return self::decorate($tag);
         }
 
         /**
@@ -468,18 +563,9 @@
          */
         public static function small($content = null, ...$classes)
         {
-            return self::factory('small', $content, ...$classes);
-        }
+            $tag = self::factory('small', $content, ...$classes);
 
-        /**
-         * @param $attribute
-         *
-         * @return mixed|null
-         * @throws \ObjectivePHP\Primitives\Exception
-         */
-        public function getAttribute($attribute)
-        {
-            return $this->attributes->get($attribute);
+            return self::decorate($tag);
         }
 
         /**
@@ -536,7 +622,7 @@
 
             $html = $this->renderer->render($this);
 
-            return $html;
+            return (string) $html;
         }
 
         /**
@@ -574,84 +660,6 @@
             }
 
             return $this;
-        }
-
-        /**
-         * Id attribute shortcut
-         *
-         * @param null $id
-         */
-        public function id($id = null)
-        {
-            if (!is_null($id))
-            {
-                return $this->addAttribute('id', $id);
-            }
-
-            return $this->getAttribute('id');
-        }
-
-        /**
-         * Name attribute shortcut
-         *
-         * @param null $name
-         */
-        public function name($name = null)
-        {
-            if (!is_null($name))
-            {
-                return $this->addAttribute('name', $name);
-            }
-
-            return $this->getAttribute('name');
-        }
-
-
-        /**
-         * Width attribute shortcut
-         *
-         * @param null $width
-         */
-        public function width($width = null)
-        {
-            if (!is_null($width))
-            {
-                return $this->addAttribute('width', $width);
-            }
-
-            return $this->getAttribute('width');
-        }
-
-        /**
-         * Style attribute shortcut
-         *
-         * @param null $style
-         */
-        public function style($style = null)
-        {
-            if (!is_null($style))
-            {
-                return $this->addAttribute('style', $style);
-            }
-
-            return $this->getAttribute('style');
-        }
-
-
-
-        /**
-         * Name attribute shortcut
-         *
-         * @param null $name
-         */
-        public function data($name, $value)
-        {
-            if (!is_null($value))
-            {
-                return $this->addAttribute('data-' . $name, $value);
-            }
-
-            return $this->getAttribute('data-' . $name);
         }
 
         /**
@@ -807,6 +815,92 @@
             }
 
             return $this;
+        }
+
+        /**
+         * Id attribute shortcut
+         *
+         * @param null $id
+         */
+        public function id($id = null)
+        {
+            if (!is_null($id))
+            {
+                return $this->addAttribute('id', $id);
+            }
+
+            return $this->getAttribute('id');
+        }
+
+        /**
+         * @param $attribute
+         *
+         * @return mixed|null
+         * @throws \ObjectivePHP\Primitives\Exception
+         */
+        public function getAttribute($attribute)
+        {
+            return $this->attributes->get($attribute);
+        }
+
+        /**
+         * Name attribute shortcut
+         *
+         * @param null $name
+         */
+        public function name($name = null)
+        {
+            if (!is_null($name))
+            {
+                return $this->addAttribute('name', $name);
+            }
+
+            return $this->getAttribute('name');
+        }
+
+        /**
+         * Width attribute shortcut
+         *
+         * @param null $width
+         */
+        public function width($width = null)
+        {
+            if (!is_null($width))
+            {
+                return $this->addAttribute('width', $width);
+            }
+
+            return $this->getAttribute('width');
+        }
+
+        /**
+         * Style attribute shortcut
+         *
+         * @param null $style
+         */
+        public function style($style = null)
+        {
+            if (!is_null($style))
+            {
+                return $this->addAttribute('style', $style);
+            }
+
+            return $this->getAttribute('style');
+        }
+
+        /**
+         * Name attribute shortcut
+         *
+         * @param null $name
+         */
+        public function data($name, $value)
+        {
+            if (!is_null($value))
+            {
+                return $this->addAttribute('data-' . $name, $value);
+            }
+
+            return $this->getAttribute('data-' . $name);
         }
 
         /**

@@ -67,7 +67,7 @@
 
             $input->addAttributes(['type' => 'text', 'id' => $id]);
 
-            return $input;
+            return self::decorate($input);
         }
 
         /**
@@ -82,7 +82,7 @@
 
             $input->addAttributes(['type' => 'password', 'id' => $id]);
 
-            return $input;
+            return self::decorate($input);
         }
 
         /**
@@ -97,7 +97,7 @@
 
             $input->addAttributes(['type' => 'date', 'id' => $id]);
 
-            return $input;
+            return self::decorate($input);
         }
 
         /**
@@ -112,7 +112,7 @@
             $input->alwaysClose();
             $input->addAttributes(['id' => $id]);
 
-            return $input;
+            return self::decorate($input);
         }
 
         /**
@@ -128,7 +128,7 @@
             $input->addAttributes(['id' => $id]);
             if ($options) $input->addOptions($options);
 
-            return $input;
+            return self::decorate($input);
         }
 
         public static function option($value, $label = null)
@@ -147,7 +147,7 @@
                 $option->addAttribute('value', $value);
             }
 
-            return $option;
+            return self::decorate($option);
         }
 
         /**
@@ -162,7 +162,7 @@
 
             $input->addAttributes(['type' => 'checkbox', 'id' => $id, 'value' => $value]);
 
-            return $input;
+            return self::decorate($input);
         }
 
         /**
@@ -177,17 +177,17 @@
 
             $input->addAttributes(['type' => 'radio', 'id' => $id, 'value' => $value]);
 
-            return $input;
+            return self::decorate($input);
         }
 
 
         public static function submit($label, ...$classes)
         {
-            $button = static::factory('input', null, ...$classes);
+            $button = static::factory('button', null, ...$classes);
             $button->addAttribute('type', 'submit');
-            $button->addAttribute('value', $label);
+            $button->getContent()->append($label);
 
-            return $button;
+            return self::decorate($button);
         }
 
         /**
@@ -201,6 +201,22 @@
             {
                 // TODO sanitize value
                 return $this->addAttribute('value', $value);
+            }
+
+            return $this->getAttribute('value');
+        }
+
+        /**
+         * Value attribute shortcut
+         *
+         * @param null $text
+         */
+        public function placeholder($text = null)
+        {
+            if (!is_null($text))
+            {
+                // TODO sanitize value
+                return $this->addAttribute('placeholder', $text);
             }
 
             return $this->getAttribute('value');
