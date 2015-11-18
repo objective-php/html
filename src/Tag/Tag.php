@@ -9,6 +9,7 @@
     use ObjectivePHP\Html\Tag\Renderer\TagRendererInterface;
     use ObjectivePHP\Primitives\Collection\Collection;
     use ObjectivePHP\Primitives\Merger\MergePolicy;
+    use ObjectivePHP\Primitives\String\String;
 
     /**
      * Class Tag
@@ -112,6 +113,9 @@
         public static function factory($tag, $content = null, ...$classes)
         {
 
+            // skip empty contents tag
+            if($content instanceof String && !(string) $content) return null;
+
             /**
              * @var $tag Tag
              */
@@ -135,6 +139,10 @@
          */
         protected static function decorate($tag)
         {
+
+            // shunt void tags
+            if(!$tag) return null;
+
             if ($decorators = self::$decorators)
             {
                 $decorators->each(function ($decorator) use ($tag)
@@ -641,7 +649,8 @@
                     $this->attributes->set($attribute, $value);
                     break;
 
-                case MergePolicy::COMBINE:
+
+                case MergePolicy::NATIVE:
 
                     $previousValue = $this->attributes->get($attribute);
                     if ($previousValue)
@@ -820,7 +829,7 @@
         /**
          * Id attribute shortcut
          *
-         * @param null $id
+         * @param $this $id
          */
         public function id($id = null)
         {
@@ -891,13 +900,16 @@
         /**
          * Name attribute shortcut
          *
-         * @param null $name
+         * @param string $name
+         * @param string $value
+         *
+         * @return $this
          */
-        public function data($name, $value)
+        public function data($name, $value = null)
         {
             if (!is_null($value))
             {
-                return $this->addAttribute('data-' . $name, $value);
+                return $this->addAttribute('data-' . $name, $value, MergePolicy::NATIVE);
             }
 
             return $this->getAttribute('data-' . $name);
@@ -917,6 +929,8 @@
                 $this->addAttribute($attribute, $value, $mergePolicy);
             })
             ;
+
+            return $this;
         }
 
         /**

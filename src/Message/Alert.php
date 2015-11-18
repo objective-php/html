@@ -5,5 +5,5 @@
     
     class Alert extends AbstractMessage
     {
-        protected $type = 'alert';
+        protected $type = 'danger';
     }
