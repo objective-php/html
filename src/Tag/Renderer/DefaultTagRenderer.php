@@ -10,6 +10,7 @@
     {
         public function render(Tag $tag)
         {
+
             if ($tag->isClosingTag())
             {
                 $tag->close(false);
@@ -26,7 +27,8 @@
                     $chunks = new Collection();
                     $tag->getContent()->each(function ($chunk) use (&$chunks)
                     {
-                        $chunks[] = (string) $chunk;
+                        $content = (string) $chunk;
+                        if($content) $chunks[] = $content;
                     })
                     ;
 

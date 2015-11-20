@@ -34,6 +34,11 @@
          */
         protected $tag = 'input';
 
+        /**
+         * @var mixed default value if no value explicitly assigned or found in self::$data
+         */
+        protected $default;
+
         public function __construct($content = null)
         {
             parent::__construct($content);
@@ -67,6 +72,36 @@
 
             $input->addAttributes(['type' => 'text', 'id' => $id]);
 
+            return self::decorate($input);
+        }
+
+        /**
+         * @param $name
+         * @param ...$classes
+         *
+         * @return $this
+         */
+        public static function number($id, ...$classes)
+        {
+            $input = static::factory('input', null, ...$classes);
+
+            $input->addAttributes(['type' => 'number', 'id' => $id]);
+
+            return self::decorate($input);
+        }
+
+        /**
+         * @param $name
+         * @param ...$classes
+         *
+         * @return $this
+         */
+        public static function hidden($id, $value = '')
+        {
+            $input = static::factory('input');
+
+            $input->addAttributes(['type' => 'hidden', 'id' => $id, 'value' => $value]);
+
             return $input;
         }
 
@@ -82,7 +117,7 @@
 
             $input->addAttributes(['type' => 'password', 'id' => $id]);
 
-            return $input;
+            return self::decorate($input);
         }
 
         /**
@@ -97,7 +132,7 @@
 
             $input->addAttributes(['type' => 'date', 'id' => $id]);
 
-            return $input;
+            return self::decorate($input);
         }
 
         /**
@@ -112,7 +147,7 @@
             $input->alwaysClose();
             $input->addAttributes(['id' => $id]);
 
-            return $input;
+            return self::decorate($input);
         }
 
         /**
@@ -128,7 +163,7 @@
             $input->addAttributes(['id' => $id]);
             if ($options) $input->addOptions($options);
 
-            return $input;
+            return self::decorate($input);
         }
 
         public static function option($value, $label = null)
@@ -147,7 +182,7 @@
                 $option->addAttribute('value', $value);
             }
 
-            return $option;
+            return self::decorate($option);
         }
 
         /**
@@ -162,7 +197,7 @@
 
             $input->addAttributes(['type' => 'checkbox', 'id' => $id, 'value' => $value]);
 
-            return $input;
+            return self::decorate($input);
         }
 
         /**
@@ -177,17 +212,17 @@
 
             $input->addAttributes(['type' => 'radio', 'id' => $id, 'value' => $value]);
 
-            return $input;
+            return self::decorate($input);
         }
 
 
         public static function submit($label, ...$classes)
         {
-            $button = static::factory('input', null, ...$classes);
+            $button = static::factory('button', null, ...$classes);
             $button->addAttribute('type', 'submit');
-            $button->addAttribute('value', $label);
+            $button->getContent()->append($label);
 
-            return $button;
+            return self::decorate($button);
         }
 
         /**
@@ -201,6 +236,22 @@
             {
                 // TODO sanitize value
                 return $this->addAttribute('value', $value);
+            }
+
+            return $this->getAttribute('value');
+        }
+
+        /**
+         * Value attribute shortcut
+         *
+         * @param null $text
+         */
+        public function placeholder($text = null)
+        {
+            if (!is_null($text))
+            {
+                // TODO sanitize value
+                return $this->addAttribute('placeholder', $text);
             }
 
             return $this->getAttribute('value');
@@ -243,16 +294,20 @@
          */
         public function assignDefaultValue()
         {
-            // if no data is set, leave the method
-            if (!self::getData()) return;
-
             $name = $this->getAttribute('name');
 
             // filter array notation
             if (substr($name, -2) == '[]') $name = substr($name, 0, -2);
 
+            $injectedValues = $this->getData();
+            $value = $injectedValues ? $injectedValues->get($name) : null;
+            $value =  $value ?: $this->defaultValue();
+
+            if(!$value) return;
+
             switch ($this->getTag())
             {
+
 
                 case 'input':
 
@@ -264,17 +319,16 @@
                             break;
 
                         case 'checkbox':
-                            if (!$this->getAttribute('checked') && $this->getData()->has($name))
+                            if (!$this->getAttribute('checked'))
                             {
-                                $dataValue = $this->getData()->get($name);
-                                if (is_scalar($dataValue) || in_array($this->getAttribute('value'), $dataValue))
+                                if (is_scalar($value) || in_array($this->getAttribute('value'), $value))
                                 {
                                     $this->addAttribute('checked', true);
                                 }
                             }
                             break;
                         case 'radio':
-                            if (!$this->getAttribute('checked') && $this->getData()->has($name))
+                            if (!$this->getAttribute('checked'))
                             {
 
                                 $this->addAttribute('checked', true);
@@ -283,33 +337,29 @@
 
                         default:
                             // handle default value
-                            if (!$this->getAttribute('value') && $this->getData()->has($name))
+                            if (!$this->getAttribute('value'))
                             {
-                                $dataValue = $this->getData()->get($name);
-                                if ($dataValue instanceof \DateTime)
+                                if ($value instanceof \DateTime)
                                 {
-                                    $dataValue = $dataValue->format(self::getDateDefaultFormat());
+                                    $value = $value->format(self::getDateDefaultFormat());
                                 }
-                                $this->addAttribute('value', $dataValue);
+                                $this->addAttribute('value', $value);
                             }
                             break;
                     }
                     break;
 
                 case 'select':
-                    if ($this->getData()->has($name))
-                    {
-                        $dataValue = Collection::cast($this->getData()->get($name));
-                        $this->getContent()->each(function (Input $option) use ($dataValue)
+                        $value = Collection::cast($value);
+                        $this->getContent()->each(function (Input $option) use ($value)
                         {
                             $optionValue = $option->getAttribute('value') ?: $option->getContent()->join('');
-                            if ($dataValue->contains($optionValue))
+                            if ($value->contains($optionValue))
                             {
                                 $option->addAttribute('selected', true);
                             }
                         })
                         ;
-                    }
                     break;
             }
         }
@@ -328,6 +378,23 @@
         public static function setData($data)
         {
             self::$data = Collection::cast($data);
+        }
+
+        /**
+         * @param null $value
+         *
+         * @return $this|mixed
+         */
+        public function defaultValue($value = null)
+        {
+            if(!is_null($value))
+            {
+                $this->default = $value;
+
+                return $this;
+            }
+
+            return $this->default;
         }
 
         /**
