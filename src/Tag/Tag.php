@@ -9,7 +9,7 @@
     use ObjectivePHP\Html\Tag\Renderer\TagRendererInterface;
     use ObjectivePHP\Primitives\Collection\Collection;
     use ObjectivePHP\Primitives\Merger\MergePolicy;
-    use ObjectivePHP\Primitives\String\String;
+    use ObjectivePHP\Primitives\String\Str;
 
     /**
      * Class Tag
@@ -114,7 +114,7 @@
         {
 
             // skip empty contents tag
-            if($content instanceof String && !(string) $content) return null;
+            if($content instanceof Str && !(string) $content) return null;
 
             /**
              * @var $tag Tag
@@ -649,8 +649,8 @@
                     $this->attributes->set($attribute, $value);
                     break;
 
-
                 case MergePolicy::NATIVE:
+                case MergePolicy::COMBINE:
 
                     $previousValue = $this->attributes->get($attribute);
                     if ($previousValue)
@@ -663,6 +663,8 @@
                     }
                     $this->attributes->set($attribute, $combinedValue);
                     break;
+
+
                 default:
                     throw new Exception('Only MergePolicy::REPLACE and COMBINE are implemented yet');
 

@@ -3,7 +3,7 @@
     namespace ObjectivePHP\Html\Message;
     
     
-    use ObjectivePHP\Primitives\String\String;
+    use ObjectivePHP\Primitives\String\Str;
 
     class AbstractMessage implements MessageInterface
     {
@@ -11,13 +11,13 @@
         protected $type;
 
         /**
-         * @var String
+         * @var Str
          */
         protected $message;
 
         public function __construct($message)
         {
-            $this->message = String::cast($message);
+            $this->message = Str::cast($message);
         }
 
         public function getType()
