@@ -180,6 +180,20 @@
             return self::decorate($tag);
         }
 
+
+        /**
+         * @param       $content
+         * @param array ...$classes
+         *
+         * @return Tag
+         */
+        public static function blockquote($content = null, ...$classes) : Tag
+        {
+            $tag = self::factory('blockquote', $content, ...$classes);
+
+            return $tag;
+        }
+
         /**
          * @param string $src
          * @param string $alt
