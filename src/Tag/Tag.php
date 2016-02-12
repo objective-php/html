@@ -181,6 +181,22 @@
         }
 
         /**
+         * @param string $src
+         * @param string $alt
+         *
+         * @return Tag
+         * @throws Exception
+         */
+        public static function img(string $src = '', string $alt = '') : Tag
+        {
+            $img = self::factory('img');
+            $img->addAttribute('src', $src);
+            $img->addAttribute('alt', $alt);
+
+            return $img;
+        }
+
+        /**
          * @param $content
          * @param ...$classes
          *
