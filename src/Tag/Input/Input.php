@@ -330,7 +330,6 @@
                         case 'radio':
                             if (!$this->getAttribute('checked'))
                             {
-
                                 $this->addAttribute('checked', true);
                             }
                             break;

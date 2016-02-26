@@ -521,6 +521,19 @@
          *
          * @return Tag
          */
+        public static function section($content = null, ...$classes)
+        {
+            $tag = self::factory('section', $content, ...$classes);
+
+            return self::decorate($tag);
+        }
+
+        /**
+         * @param $content
+         * @param ...$classes
+         *
+         * @return Tag
+         */
         public static function table($content = null, ...$classes)
         {
             $tag = self::factory('table', $content, ...$classes);
@@ -1072,5 +1085,10 @@
             {
                 echo $this->__toString();
             }
+        }
+
+        public function __clone()
+        {
+            $this->content = clone $this->content;
         }
     }
