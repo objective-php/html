@@ -31,9 +31,11 @@
         public function set($attribute, $value)
         {
             // handle collections
+            //
+            // EDIT I honnestly do not remember why the hell I wrote that piece of code oO - Rusty
             if ($this->has($attribute))
             {
-                $set = $this->get('attribute');
+                $set = $this->get($attribute);
                 if ($set instanceof Collection)
                 {
                     $set->clear()->append($value);

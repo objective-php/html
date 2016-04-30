@@ -4,9 +4,18 @@
 
     use ObjectivePHP\Html\Attributes\Attributes;
     use ObjectivePHP\PHPUnit\TestCase;
+    use ObjectivePHP\Primitives\Collection\Collection;
 
     class AttributesTest extends TestCase
     {
+
+        public function testInitialization()
+        {
+            $attribs = new Attributes(['x' => 'y']);
+            $this->assertTrue($attribs->has('x'));
+            $this->assertEquals('y', $attribs['x']);
+
+        }
 
         public function testToString()
         {
@@ -27,6 +36,23 @@
 
             $attribs->set('a', false);
             $this->assertEquals('disabled', (string) $attribs);
+        }
+
+
+        public function testMultiValuesAttributes()
+        {
+            $values = new Collection(['a', 'b']);
+            $attribs = new Attributes(['x' => $values]);
+
+            $this->assertInstanceOf(Collection::class, $attribs['x']);
+            $this->assertSame($values, $attribs['x']);
+
+            $attribs->set('x', $otherValues = new Collection(['y', 'z']));
+
+            $this->assertInstanceOf(Collection::class, $attribs['x']);
+            $this->assertSame($values, $attribs['x']);
+
+
         }
 
     }

@@ -30,7 +30,7 @@
             else
             {
                 $count = 0;
-                $this->messages->each(
+                $this->each(
                     function (MessageInterface $message) use (&$count, $type)
                     {
                         if($type == $message->getType()) $count ++;
