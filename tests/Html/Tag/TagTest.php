@@ -17,7 +17,7 @@
             $tag['class'][] = 'third';
 
             $this->assertInstanceOf(Tag::class, $tag);
-            $this->assertEquals('div', $tag->getTag());
+            $this->assertEquals('div', $tag->getTagName());
             $this->assertEquals(new Collection(['first', 'second', 'third']), $tag->getAttribute('class'));
 
             $tag['class'] = ['fourth', 'fifth sixth'];

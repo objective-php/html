@@ -1,6 +1,6 @@
 <?php
 
-    namespace ObjectivePHP\Html\Attributes;
+    namespace ObjectivePHP\Html\Tag\Attributes;
     
     
     use ObjectivePHP\Primitives\Collection\Collection;
@@ -31,8 +31,6 @@
         public function set($attribute, $value)
         {
             // handle collections
-            //
-            // EDIT I honnestly do not remember why the hell I wrote that piece of code oO - Rusty
             if ($this->has($attribute))
             {
                 $set = $this->get($attribute);
@@ -49,6 +47,8 @@
             return $this;
         }
 
+        
+        
         public function __toString()
         {
             $flattenedAttributes = [];
@@ -56,7 +56,7 @@
             $this->each(function ($value, $attribute) use (&$flattenedAttributes)
             {
                 // skip empty collections
-                if ($value instanceof Collection && $value->isEmpty()) return;
+                if (!$value || ($value instanceof Collection && $value->isEmpty())) return;
 
                 if(is_int($attribute))
                 {
@@ -66,7 +66,10 @@
                 {
                     if($value === true) $flattenedAttributes[] = $attribute;
                 }
-                else $flattenedAttributes[] = $attribute . '="' . Collection::cast($value)->join(' ') . '"';
+                else
+                {
+                    $flattenedAttributes[] = $attribute . '="' . Collection::cast($value)->join(' ') . '"';
+                }
             });
 
             return trim(implode(' ', $flattenedAttributes));

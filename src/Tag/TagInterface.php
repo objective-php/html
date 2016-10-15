@@ -47,13 +47,21 @@
          *
          * @return mixed
          */
-        public function setTag($tag);
+        public function setTagName($tag);
 
         /**
          * @return mixed
          */
-        public function getTag();
+        public function getTagName();
 
+        /**
+         * @param ...$content
+         *
+         * @return mixed
+         */
+        public function prepend(...$content);
+        
+        
         /**
          * @param ...$content
          *

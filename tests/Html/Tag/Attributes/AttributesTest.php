@@ -2,7 +2,7 @@
     
     namespace Tests\ObjectivePHP\HtmlAttributes;
 
-    use ObjectivePHP\Html\Attributes\Attributes;
+    use ObjectivePHP\Html\Tag\Attributes\Attributes;
     use ObjectivePHP\PHPUnit\TestCase;
     use ObjectivePHP\Primitives\Collection\Collection;
 
@@ -52,7 +52,6 @@
             $this->assertInstanceOf(Collection::class, $attribs['x']);
             $this->assertSame($values, $attribs['x']);
 
-
         }
-
+        
     }

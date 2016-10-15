@@ -15,11 +15,11 @@
             {
                 $tag->close(false);
 
-                return '</' . $tag->getTag() . '>';
+                return '</' . $tag->getTagName() . '>';
             }
             else
             {
-                $html = '<' . trim(implode(' ', [$tag->getTag(), $tag->getAttributes()])) . '>';
+                $html = '<' . trim(implode(' ', [$tag->getTagName(), $tag->getAttributes()])) . '>';
 
 
                 if (!$tag->getContent()->isEmpty())
@@ -34,11 +34,11 @@
 
                     $html .= $chunks->join($tag->getSeparator())->trim();
 
-                    $html .= '</' . $tag->getTag() . '>';
+                    $html .= '</' . $tag->getTagName() . '>';
                 }
                 elseif ($tag->isAlwaysClosed())
                 {
-                    $html .= '</' . $tag->getTag() . '>';
+                    $html .= '</' . $tag->getTagName() . '>';
                 }
 
                 return $html;

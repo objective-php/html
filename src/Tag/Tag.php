@@ -3,8 +3,9 @@
     namespace ObjectivePHP\Html\Tag;
     
     
-    use ObjectivePHP\Html\Attributes\Attributes;
     use ObjectivePHP\Html\Exception;
+    use ObjectivePHP\Html\Tag\Attributes\Attributes;
+    use ObjectivePHP\Html\Tag\Attributes\AttributesHandler;
     use ObjectivePHP\Html\Tag\Renderer\DefaultTagRenderer;
     use ObjectivePHP\Html\Tag\Renderer\TagRendererInterface;
     use ObjectivePHP\Primitives\Collection\Collection;
@@ -19,15 +20,12 @@
     class Tag implements TagInterface
     {
 
+        use AttributesHandler;
+        
         /**
          * @var Collection
          */
         protected static $decorators;
-
-        /**
-         * @var Attributes
-         */
-        protected $attributes;
 
         /**
          * @var Collection
@@ -37,7 +35,7 @@
         /**
          * @var string
          */
-        protected $tag = 'div';
+        protected $tagName = 'div';
 
         /**
          * @var string
@@ -74,7 +72,6 @@
          */
         public function __construct($content = null)
         {
-            $this->attributes = new Attributes;
             $this->content    = new Collection;
             $this->renderer   = new DefaultTagRenderer();
 
@@ -104,32 +101,32 @@
         /**
          * Generate a tag
          *
-         * @param string $tag
+         * @param string $tagName
          * @param string $content
          * @param array  $classes
          *
          * @return $this
          */
-        public static function factory($tag, $content = null, ...$classes)
+        public static function factory($tagName, $content = null, ...$classes)
         {
 
             // skip empty contents tag
             if($content instanceof Str && !(string) $content) return null;
 
             /**
-             * @var $tag Tag
+             * @var $tagName Tag
              */
-            $tag = (new static())->setTag($tag);
+            $tagName = (new static())->setTagName($tagName);
 
             if (!is_null($content))
             {
                 $content = Collection::cast($content)->toArray();
-                $tag->append(...$content);
+                $tagName->append(...$content);
             }
 
-            $tag->addClass(...$classes);
+            $tagName->addClass(...$classes);
 
-            return $tag;
+            return $tagName;
         }
 
         /**
@@ -624,7 +621,7 @@
          */
         public function getClasses()
         {
-            return $this->attributes['class'];
+            return $this->getAttributes()['class'];
         }
 
         /**
@@ -689,13 +686,13 @@
             switch ($mergePolicy)
             {
                 case MergePolicy::REPLACE:
-                    $this->attributes->set($attribute, $value);
+                    $this->getAttributes()->set($attribute, $value);
                     break;
 
                 case MergePolicy::NATIVE:
                 case MergePolicy::COMBINE:
 
-                    $previousValue = $this->attributes->get($attribute);
+                    $previousValue = $this->getAttributes()->get($attribute);
                     if ($previousValue)
                     {
                         $combinedValue = Collection::cast($previousValue)->merge(Collection::cast($value));
@@ -704,7 +701,7 @@
                     {
                         $combinedValue = $value;
                     }
-                    $this->attributes->set($attribute, $combinedValue);
+                    $this->getAttributes()->set($attribute, $combinedValue);
                     break;
 
 
@@ -725,7 +722,7 @@
         {
             foreach ($class as $cssClass)
             {
-                $this->attributes['class']->append(...Collection::cast(explode(' ', $cssClass)));
+                $this->getAttributes()['class']->append(...Collection::cast(explode(' ', $cssClass)));
             }
 
             return $this;
@@ -762,19 +759,19 @@
         /**
          * @return string
          */
-        public function getTag()
+        public function getTagName()
         {
-            return $this->tag;
+            return $this->tagName;
         }
 
         /**
-         * @param $tag
+         * @param $tagName
          *
          * @return $this
          */
-        public function setTag($tag)
+        public function setTagName($tagName)
         {
-            $this->tag = $tag;
+            $this->tagName = $tagName;
 
             return $this;
         }
@@ -786,7 +783,7 @@
          */
         public function offsetExists($offset)
         {
-            return $this->attributes->has($offset);
+            return $this->getAttributes()->has($offset);
         }
 
         /**
@@ -797,7 +794,7 @@
          */
         public function offsetGet($offset)
         {
-            return $this->attributes->get($offset);
+            return $this->getAttributes()->get($offset);
         }
 
         /**
@@ -809,13 +806,13 @@
             switch ($offset)
             {
                 case 'class':
-                    $this->attributes['class']->clear();
+                    $this->getAttributes()['class']->clear();
                     if (!is_array($value)) $value = [$value];
                     $this->addClass(...$value);
                     break;
 
                 default:
-                    $this->attributes->set($offset, $value);
+                    $this->getAttributes()->set($offset, $value);
                     break;
             }
         }
@@ -828,11 +825,11 @@
             switch ($offset)
             {
                 case 'class':
-                    $this->attributes->set($offset, new Collection());
+                    $this->getAttributes()->set($offset, new Collection());
                     break;
 
                 default:
-                    unset($this->attributes[$offset]);
+                    unset($this->getAttributes()[$offset]);
                     break;
             }
         }
@@ -846,7 +843,7 @@
         {
             foreach ($attribute as $htmlAttribute)
             {
-                unset($this->attributes[$htmlAttribute]);
+                unset($this->getAttributes()[$htmlAttribute]);
             }
 
             return $this;
@@ -861,11 +858,11 @@
         {
             foreach ($class as $cssClass)
             {
-                $index = $this->attributes['class']->search($cssClass);
-                unset($this->attributes['class'][$index]);
+                $index = $this->getAttributes()['class']->search($cssClass);
+                unset($this->getAttributes()['class'][$index]);
 
                 // reset keys
-                $this->attributes['class']->fromArray($this->attributes['class']->values()->toArray());
+                $this->getAttributes()['class']->fromArray($this->getAttributes()['class']->values()->toArray());
             }
 
             return $this;
@@ -894,7 +891,7 @@
          */
         public function getAttribute($attribute)
         {
-            return $this->attributes->get($attribute);
+            return $this->getAttributes()->get($attribute);
         }
 
         /**
@@ -943,24 +940,6 @@
         }
 
         /**
-         * Name attribute shortcut
-         *
-         * @param string $name
-         * @param string $value
-         *
-         * @return $this
-         */
-        public function data($name, $value = null)
-        {
-            if (!is_null($value))
-            {
-                return $this->addAttribute('data-' . $name, $value, MergePolicy::NATIVE);
-            }
-
-            return $this->getAttribute('data-' . $name);
-        }
-
-        /**
          * @param       $attributes
          * @param array $mergePolicies
          *
@@ -976,14 +955,6 @@
             ;
 
             return $this;
-        }
-
-        /**
-         * @return Attributes
-         */
-        public function getAttributes()
-        {
-            return $this->attributes;
         }
 
         /**

@@ -32,7 +32,7 @@
         /**
          * @var string
          */
-        protected $tag = 'input';
+        protected $tagName = 'input';
 
         /**
          * @var mixed default value if no value explicitly assigned or found in self::$data
@@ -305,7 +305,7 @@
 
             if(!$value) return;
 
-            switch ($this->getTag())
+            switch ($this->getTagName())
             {
 
 
