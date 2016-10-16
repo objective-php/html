@@ -10,9 +10,9 @@
 namespace ObjectivePHP\Html\Form\Element\Input;
 
 
-use ObjectivePHP\Html\Form\Element\Input\Renderer\TextInputRenderer;
+use ObjectivePHP\Html\Form\Element\Input\Renderer\SubmitInputRenderer;
 
-class TextInput extends AbstractInput
+class SubmitInput extends AbstractInput
 {
-    protected $defaultRenderer = TextInputRenderer::class;
+    protected $defaultRenderer = SubmitInputRenderer::class;
 }

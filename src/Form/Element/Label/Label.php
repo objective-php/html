@@ -10,84 +10,15 @@
 namespace ObjectivePHP\Html\Form\Element\Label;
 
 
-use ObjectivePHP\Html\Form\Renderer\RendererInterface;
-use ObjectivePHP\Html\Form\Renderer\RenderingHandler;
-use ObjectivePHP\Html\Tag\Tag;
+use ObjectivePHP\Html\Form\Element\Label\Renderer\LabelRenderer;
 
-class Label implements LabelInterface
+/**
+ * Class Label
+ *
+ * @package ObjectivePHP\Html\Form\Element\Label
+ */
+class Label extends AbstractLabel
 {
-    use RenderingHandler;
-    
-    protected $placement = self::WRAP;
-    
-    protected $text;
-    
-    /**
-     * Label constructor.
-     *
-     * @param string $placement
-     * @param        $text
-     */
-    public function __construct($text, $placement = self::WRAP)
-    {
-        $this->placement = $placement;
-        $this->text      = $text;
-    }
-    
-    
-    public function getPlacement() : string
-    {
-        return $this->placement;
-    }
-    
-    public function setPlacement(string $placement) : LabelInterface
-    {
-        $this->placement = $placement;
-        
-        return $this;
-    }
-    
-    /**
-     * @param mixed $text
-     *
-     * @return $this
-     */
-    public function setText($text)
-    {
-        $this->text = $text;
-        
-        return $this;
-    }
-    
-    /**
-     * @return string
-     */
-    public function getText() : string
-    {
-        return $this->text;
-    }
-    
-    /**
-     * @return RendererInterface
-     */
-    public function getRenderer() : RendererInterface
-    {
-        if(is_null($this->renderer))
-        {
-            $this->setRenderer(function(LabelInterface $label, $content = null) {
-               $output = Tag::label($label->getText(), '');
-                if(!is_null($content))
-                {
-                    $output->append($content);
-                }
-                    
-                return $output;
-
-            });
-        }
-        
-        return $this->renderer;
-    }
-    
+    protected $defaultRenderer = LabelRenderer::class;
     
 }

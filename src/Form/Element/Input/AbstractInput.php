@@ -10,11 +10,17 @@
 namespace ObjectivePHP\Html\Form\Element\Input;
 
 
+use ObjectivePHP\Html\Form\Element\ElementInterface;
 use ObjectivePHP\Html\Form\Renderer\RenderingHandler;
 use ObjectivePHP\Html\Form\ValidationHandler;
 use ObjectivePHP\Html\Tag\Attributes\AttributesHandler;
 use ObjectivePHP\Notification\Stack;
 
+/**
+ * Class AbstractInput
+ *
+ * @package ObjectivePHP\Html\Form\Element\Input
+ */
 class AbstractInput implements InputInterface
 {
     
@@ -22,13 +28,48 @@ class AbstractInput implements InputInterface
     use RenderingHandler;
     use ValidationHandler;
     
+    /**
+     * @var string
+     */
     protected $name;
     
+    /**
+     * @var string
+     */
     protected $id;
     
+    /**
+     * @var mixed
+     */
     protected $value;
     
+    /**
+     * @var mixed
+     */
     protected $defaultValue;
+    
+    /**
+     * @var ElementInterface
+     */
+    protected $element;
+    
+    /**
+     * @var mixed
+     */
+    protected $defaultRenderer;
+    
+    /**
+     * AbstractInput constructor.
+     *
+     * @param $name
+     * @param $id
+     */
+    public function __construct($name, $id = null)
+    {
+        if($id) $this->setId($id);
+        $this->setName($name);
+    }
+    
     
     /**
      * @return mixed
@@ -46,6 +87,11 @@ class AbstractInput implements InputInterface
     public function setName($name) : InputInterface
     {
         $this->name = $name;
+        
+        if(is_null($this->id))
+        {
+            $this->id = $name;
+        }
         
         return $this;
     }
@@ -85,7 +131,9 @@ class AbstractInput implements InputInterface
      */
     public function setValue($value) : InputInterface
     {
-        // TODO: Implement setValue() method.
+        $this->value = $value;
+        
+        return $this;
     }
     
     /**
@@ -112,6 +160,26 @@ class AbstractInput implements InputInterface
     public function validate() : Stack
     {
         return new Stack();
+    }
+    
+    /**
+     * @return ElementInterface
+     */
+    public function getElement(): ElementInterface
+    {
+        return $this->element;
+    }
+    
+    /**
+     * @param ElementInterface $element
+     *
+     * @return $this
+     */
+    public function setElement(ElementInterface $element)
+    {
+        $this->element = $element;
+        
+        return $this;
     }
     
 }

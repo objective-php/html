@@ -23,6 +23,8 @@ trait RenderingHandler
      */
     protected $renderer;
     
+    protected $defaultRenderer;
+    
     /**
      * @param $renderer
      *
@@ -45,6 +47,25 @@ trait RenderingHandler
      */
     public function getRenderer() : RendererInterface
     {
+        if (is_null($this->renderer))
+        {
+            if (!is_null($this->defaultRenderer))
+            {
+                
+                if (class_exists($this->defaultRenderer))
+                {
+                    $rendererClass = $this->defaultRenderer;
+                    $renderer      = new $rendererClass;
+                }
+                else
+                {
+                    $renderer = $this->defaultRenderer;
+                }
+                
+                $this->setRenderer($renderer);
+            }
+        }
+        
         return $this->renderer;
     }
     

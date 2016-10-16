@@ -5,6 +5,9 @@
     
     class Option extends Input
     {
+        
+        protected $tagName = 'option';
+        
         public function isSelected()
         {
             return $this->getAttribute('selected');

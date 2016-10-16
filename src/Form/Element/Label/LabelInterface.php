@@ -10,9 +10,11 @@
 namespace ObjectivePHP\Html\Form\Element\Label;
 
 
+use ObjectivePHP\Html\Form\Element\ElementInterface;
 use ObjectivePHP\Html\Form\Renderer\RenderableInterface;
+use ObjectivePHP\Html\Tag\Attributes\AttributesProvider;
 
-interface LabelInterface extends RenderableInterface
+interface LabelInterface extends RenderableInterface, AttributesProvider
 {
     const WRAP   = 'wrap';
     const BEFORE = 'before';
@@ -25,4 +27,9 @@ interface LabelInterface extends RenderableInterface
     public function setText($text);
     
     public function getText() : string;
+    
+    public function setElement(ElementInterface $element);
+    
+    public function getElement() : ElementInterface;
+    
 }

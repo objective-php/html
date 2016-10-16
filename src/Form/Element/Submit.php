@@ -10,29 +10,26 @@
 namespace ObjectivePHP\Html\Form\Element;
 
 
-use ObjectivePHP\Html\Form\Element\Input\TextInput;
-use ObjectivePHP\Html\Form\Element\Label\Label;
-use ObjectivePHP\Html\Form\Element\Label\LabelInterface;
+use ObjectivePHP\Html\Form\Element\Input\SubmitInput;
 use ObjectivePHP\Html\Form\Element\Renderer\ElementRenderer;
 
-class Text extends AbstractElement
+class Submit extends AbstractElement
 {
+    
     protected $defaultRenderer = ElementRenderer::class;
     
     /**
-     * Text constructor.
+     * SubmitInput constructor.
      *
      * @param $id
      */
     public function __construct($id, $label = null)
     {
-        parent::__construct($id, $label);
+        parent::__construct($id);
         
-        $input = new TextInput($id);
-        
+        $input = new SubmitInput($id);
         $input->setId($id);
+        $input->setValue($label);
         $this->setInput($input);
-        
     }
-    
 }

@@ -13,10 +13,10 @@ namespace ObjectivePHP\Html\Form\Element;
 use ObjectivePHP\Html\Form\Renderer\RenderableInterface;
 use ObjectivePHP\Html\Form\Element\Input\InputInterface;
 use ObjectivePHP\Html\Form\Element\Label\LabelInterface;
-use ObjectivePHP\Html\Tag\Attributes\Attributes;
 use ObjectivePHP\Notification\Stack;
+use ObjectivePHP\Html\Tag\Attributes\AttributesProvider;
 
-interface ElementInterface extends RenderableInterface
+interface ElementInterface extends RenderableInterface, AttributesProvider
 {
     public function getId() : string;
     
@@ -30,6 +30,8 @@ interface ElementInterface extends RenderableInterface
     
     public function getLabel() : LabelInterface;
     
+    public function hasLabel() : bool;
+    
     public function setValue($value) : ElementInterface;
     
     public function getValue();
@@ -42,5 +44,4 @@ interface ElementInterface extends RenderableInterface
     
     public function validate() : Stack;
     
-    public function getAttributes() : Attributes;
 }

@@ -10,11 +10,12 @@
 namespace ObjectivePHP\Html\Form\Element\Input;
 
 
+use ObjectivePHP\Html\Form\Element\ElementInterface;
 use ObjectivePHP\Html\Form\Renderer\RenderableInterface;
-use ObjectivePHP\Html\Tag\Attributes\Attributes;
 use ObjectivePHP\Notification\Stack;
+use ObjectivePHP\Html\Tag\Attributes\AttributesProvider;
 
-interface InputInterface extends RenderableInterface
+interface InputInterface extends RenderableInterface, AttributesProvider
 {
     public function setName($name) : InputInterface;
     
@@ -23,10 +24,6 @@ interface InputInterface extends RenderableInterface
     public function setId($id) : InputInterface;
     
     public function getId();
-    
-    public function setAttributes(Attributes $attributes);
-    
-    public function getAttributes() : Attributes;
     
     public function setValue($value) : InputInterface;
     
@@ -39,4 +36,8 @@ interface InputInterface extends RenderableInterface
     public function getMessages() : Stack;
     
     public function validate() : Stack;
+    
+    public function setElement(ElementInterface $element);
+    
+    public function getElement() : ElementInterface;
 }

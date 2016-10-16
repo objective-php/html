@@ -12,19 +12,15 @@ namespace ObjectivePHP\Html\Form;
 
 use ObjectivePHP\Html\Form\Renderer\RenderableInterface;
 use ObjectivePHP\Html\Form\Element\ElementInterface;
-use ObjectivePHP\Html\Tag\Attributes\Attributes;
+use ObjectivePHP\Html\Tag\Attributes\AttributesProvider;
 use ObjectivePHP\Notification\Stack;
 use ObjectivePHP\Primitives\Collection\Collection;
 
-interface FormInterface extends RenderableInterface
+interface FormInterface extends RenderableInterface, AttributesProvider
 {
     public function setAction(string $action) : FormInterface;
     
     public function getAction() : string;
-    
-    public function setAttributes(Attributes $attributes);
-    
-    public function getAttributes() : Attributes;
     
     public function addElement(ElementInterface $element);
     

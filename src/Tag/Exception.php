@@ -7,10 +7,10 @@
  * @license http://opensource.org/licenses/GPL-3.0 GNU GPL License 3.0
  */
 
-namespace ObjectivePHP\Html\Form\Renderer;
+namespace ObjectivePHP\Html\Tag;
 
 
-interface RendererInterface
+class Exception extends \ObjectivePHP\Html\Exception
 {
-    public function render(RenderableInterface $select, $content = null);
+    
 }

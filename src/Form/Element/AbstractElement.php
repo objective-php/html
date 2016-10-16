@@ -11,8 +11,9 @@ namespace ObjectivePHP\Html\Form\Element;
 
 
 use ObjectivePHP\Html\Form\Element\Input\InputInterface;
+use ObjectivePHP\Html\Form\Element\Label\Label;
 use ObjectivePHP\Html\Form\Element\Label\LabelInterface;
-use ObjectivePHP\Html\Form\Renderer\ElementRenderingHandler;
+use ObjectivePHP\Html\Form\Renderer\RenderingHandler;
 use ObjectivePHP\Html\Form\ValidationHandler;
 use ObjectivePHP\Html\Tag\Attributes\AttributesHandler;
 use ObjectivePHP\Notification\Stack;
@@ -26,7 +27,7 @@ class AbstractElement implements ElementInterface
 {
     use AttributesHandler;
     use ValidationHandler;
-    use ElementRenderingHandler;
+    use RenderingHandler;
     
     /**
      * @var
@@ -42,8 +43,18 @@ class AbstractElement implements ElementInterface
     protected $label;
     
     
-    public function __construct($id)
+    public function __construct($id, $label = null)
     {
+        if (!is_null($label))
+        {
+            if (!$label instanceof LabelInterface)
+            {
+                $label = new Label($label);
+            }
+            
+            $this->setLabel($label);
+        }
+        
         $this->setId($id);
     }
     
@@ -70,6 +81,8 @@ class AbstractElement implements ElementInterface
      */
     public function setInput(InputInterface $input) : ElementInterface
     {
+        
+        $input->setElement($this);
         $this->input = $input;
         
         return $this;
@@ -110,9 +123,18 @@ class AbstractElement implements ElementInterface
      */
     public function setLabel(LabelInterface $label) : ElementInterface
     {
+        $label->setElement($this);
         $this->label = $label;
         
         return $this;
+    }
+    
+    /**
+     * @return bool
+     */
+    public function hasLabel() : bool
+    {
+        return (bool) $this->label;
     }
     
     /**

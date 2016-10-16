@@ -616,13 +616,6 @@
             return self::decorate($tag);
         }
 
-        /**
-         * @return mixed|null
-         */
-        public function getClasses()
-        {
-            return $this->getAttributes()['class'];
-        }
 
         /**
          * @param ...$content
@@ -673,60 +666,6 @@
             return (string) $html;
         }
 
-        /**
-         * @param     $attribute
-         * @param     $value
-         * @param int $mergePolicy
-         *
-         * @return $this
-         * @throws Exception
-         */
-        public function addAttribute($attribute, $value, $mergePolicy = MergePolicy::REPLACE)
-        {
-            switch ($mergePolicy)
-            {
-                case MergePolicy::REPLACE:
-                    $this->getAttributes()->set($attribute, $value);
-                    break;
-
-                case MergePolicy::NATIVE:
-                case MergePolicy::COMBINE:
-
-                    $previousValue = $this->getAttributes()->get($attribute);
-                    if ($previousValue)
-                    {
-                        $combinedValue = Collection::cast($previousValue)->merge(Collection::cast($value));
-                    }
-                    else
-                    {
-                        $combinedValue = $value;
-                    }
-                    $this->getAttributes()->set($attribute, $combinedValue);
-                    break;
-
-
-                default:
-                    throw new Exception('Only MergePolicy::REPLACE and COMBINE are implemented yet');
-
-            }
-
-            return $this;
-        }
-
-        /**
-         * @param ...$class
-         *
-         * @return $this
-         */
-        public function addClass(...$class)
-        {
-            foreach ($class as $cssClass)
-            {
-                $this->getAttributes()['class']->append(...Collection::cast(explode(' ', $cssClass)));
-            }
-
-            return $this;
-        }
 
         /**
          * @param ...$content
@@ -834,39 +773,7 @@
             }
         }
 
-        /**
-         * @param ...$attribute
-         *
-         * @return $this
-         */
-        public function removeAttribute(...$attribute)
-        {
-            foreach ($attribute as $htmlAttribute)
-            {
-                unset($this->getAttributes()[$htmlAttribute]);
-            }
-
-            return $this;
-        }
-
-        /**
-         * @param ...$class
-         *
-         * @return $this
-         */
-        public function removeClass(...$class)
-        {
-            foreach ($class as $cssClass)
-            {
-                $index = $this->getAttributes()['class']->search($cssClass);
-                unset($this->getAttributes()['class'][$index]);
-
-                // reset keys
-                $this->getAttributes()['class']->fromArray($this->getAttributes()['class']->values()->toArray());
-            }
-
-            return $this;
-        }
+        
 
         /**
          * Id attribute shortcut
@@ -883,79 +790,7 @@
             return $this->getAttribute('id');
         }
 
-        /**
-         * @param $attribute
-         *
-         * @return mixed|null
-         * @throws \ObjectivePHP\Primitives\Exception
-         */
-        public function getAttribute($attribute)
-        {
-            return $this->getAttributes()->get($attribute);
-        }
-
-        /**
-         * Name attribute shortcut
-         *
-         * @param null $name
-         */
-        public function name($name = null)
-        {
-            if (!is_null($name))
-            {
-                return $this->addAttribute('name', $name);
-            }
-
-            return $this->getAttribute('name');
-        }
-
-        /**
-         * Width attribute shortcut
-         *
-         * @param null $width
-         */
-        public function width($width = null)
-        {
-            if (!is_null($width))
-            {
-                return $this->addAttribute('width', $width);
-            }
-
-            return $this->getAttribute('width');
-        }
-
-        /**
-         * Style attribute shortcut
-         *
-         * @param null $style
-         */
-        public function style($style = null)
-        {
-            if (!is_null($style))
-            {
-                return $this->addAttribute('style', $style);
-            }
-
-            return $this->getAttribute('style');
-        }
-
-        /**
-         * @param       $attributes
-         * @param array $mergePolicies
-         *
-         * @throws \ObjectivePHP\Primitives\Exception
-         */
-        public function addAttributes($attributes, $mergePolicies = [])
-        {
-            Collection::cast($attributes)->each(function ($value, $attribute) use ($mergePolicies)
-            {
-                $mergePolicy = isset($mergePolicies[$attribute]) ? $mergePolicies[$attribute] : MergePolicy::REPLACE;
-                $this->addAttribute($attribute, $value, $mergePolicy);
-            })
-            ;
-
-            return $this;
-        }
+        
 
         /**
          * @return string

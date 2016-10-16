@@ -14,22 +14,23 @@ use ObjectivePHP\Html\Form\Element\ElementInterface;
 use ObjectivePHP\Html\Form\FormInterface;
 use ObjectivePHP\Html\Tag\Tag;
 
-class DefaultFormRenderer implements RendererInterface
+class FormRenderer implements RendererInterface
 {
     /**
-     * @param FormInterface $form
+     * @param FormInterface $select
      * @param null          $content
      *
      * @return mixed
      */
-    public function render(RenderableInterface $form, $content = null)
+    public function render(RenderableInterface $select, $content = null)
     {
-       $output = Tag::form($form->getAction());
+        $output = Tag::form($select->getAction())->append($content);
+        $output->getAttributes()->merge($select->getAttributes());
         
-        /** @var ElementInterface $element */
-        foreach($form->getElements() as $element)
+        /** @var ElementInterface $select */
+        foreach ($select->getElements() as $select)
         {
-            $output->append($element->render());
+            $output->append(PHP_EOL, $select->render(), PHP_EOL);
         }
         
         return $output;
