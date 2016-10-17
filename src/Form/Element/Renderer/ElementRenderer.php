@@ -10,6 +10,7 @@
 namespace ObjectivePHP\Html\Form\Element\Renderer;
 
 
+use ObjectivePHP\Html\Form\Element\Description\DescriptionInterface;
 use ObjectivePHP\Html\Form\Element\ElementInterface;
 use ObjectivePHP\Html\Form\Element\Label\LabelInterface;
 use ObjectivePHP\Html\Form\Renderer\RenderableInterface;
@@ -55,7 +56,11 @@ class ElementRenderer implements RendererInterface
         {
             $output->append($renderedInput);
         }
-        
+
+        if ($select->hasDescription()) {
+            $output->append($select->getDescription());
+        }
+
         $messages = $select->getMessages();
         if ($messages->count('alert') || $messages->count('warning'))
         {

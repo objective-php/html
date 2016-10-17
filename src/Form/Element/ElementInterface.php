@@ -10,6 +10,7 @@
 namespace ObjectivePHP\Html\Form\Element;
 
 
+use ObjectivePHP\Html\Form\Element\Description\DescriptionInterface;
 use ObjectivePHP\Html\Form\Renderer\RenderableInterface;
 use ObjectivePHP\Html\Form\Element\Input\InputInterface;
 use ObjectivePHP\Html\Form\Element\Label\LabelInterface;
@@ -39,7 +40,13 @@ interface ElementInterface extends RenderableInterface, AttributesProvider
     public function setDefaultValue($defaultValue) : ElementInterface;
     
     public function getDefaultValue();
-    
+
+    public function getDescription() : DescriptionInterface;
+
+    public function setDescription(DescriptionInterface $description);
+
+    public function hasDescription() : bool;
+
     public function getMessages() : Stack;
     
     public function validate() : Stack;

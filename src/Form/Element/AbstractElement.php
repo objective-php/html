@@ -10,6 +10,7 @@
 namespace ObjectivePHP\Html\Form\Element;
 
 
+use ObjectivePHP\Html\Form\Element\Description\DescriptionInterface;
 use ObjectivePHP\Html\Form\Element\Input\InputInterface;
 use ObjectivePHP\Html\Form\Element\Label\Label;
 use ObjectivePHP\Html\Form\Element\Label\LabelInterface;
@@ -28,7 +29,7 @@ class AbstractElement implements ElementInterface
     use AttributesHandler;
     use ValidationHandler;
     use RenderingHandler;
-    
+
     /**
      * @var
      */
@@ -41,8 +42,12 @@ class AbstractElement implements ElementInterface
     
     /** @var  LabelInterface */
     protected $label;
-    
-    
+
+    /**
+     * @var DescriptionInterface $description
+     */
+    protected $description;
+
     public function __construct($id, $label = null)
     {
         if (!is_null($label))
@@ -180,5 +185,32 @@ class AbstractElement implements ElementInterface
     {
         return $this->getInput()->validate();
     }
-    
+
+    /**
+     * @return DescriptionInterface
+     */
+    public function getDescription() : DescriptionInterface
+    {
+        return $this->description;
+    }
+
+    /**
+     * @param DescriptionInterface $description
+     * @return AbstractElement
+     */
+    public function setDescription(DescriptionInterface $description)
+    {
+        $description->setElement($this);
+        $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasDescription() : bool
+    {
+        return (bool) $this->description;
+    }
 }
