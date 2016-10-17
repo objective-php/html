@@ -9,6 +9,7 @@
 
 namespace ObjectivePHP\Html\Form\Example;
 
+use ObjectivePHP\Html\Form\Element\Description\Description;
 use ObjectivePHP\Html\Form\Element\Input\InputInterface;
 use ObjectivePHP\Html\Form\Element\Label\Label;
 use ObjectivePHP\Html\Form\Element\Label\LabelInterface;
@@ -33,7 +34,7 @@ class MyForm extends Form
         $this->setName('myForm');
         
         // add name field
-        $text = (new Text('name', 'Saisir votre nom'))->attr('class', 'toto');
+        $text = (new Text('name', 'Username'))->attr('class', 'toto');
         $text->getInput()->attr('class', 'titi');
         $text->getLabel()->setPlacement(Label::BEFORE)->attr('class', 'test');
 
@@ -42,11 +43,12 @@ class MyForm extends Form
         $this->addElement($text);
     
         
-        $select = new Select('list', 'Faites un choix', ['first' => 'first', 'second' => 'second', 'third' => 'third']);
+        $select = new Select('list', 'Make a choice', ['first' => 'first', 'second' => 'second', 'third' => 'third']);
+        $select->setDescription(new Description('Please note that first come before second and, of course, third come last.'));
         $this->addElement($select);
         
         // add submit button
-        $submit = (new Submit('submit', 'Envoyer'));
+        $submit = (new Submit('submit', 'Send'));
         $submit->getInput()->addClass('submit-button')->attr('test', 'value')->data('test', 'data-value');
         $this->addElement($submit);
         
