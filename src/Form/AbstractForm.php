@@ -70,7 +70,7 @@ abstract class AbstractForm implements FormInterface
      */
     protected function prepareElement(ElementInterface $element)
     {
-
+        $element->setForm($this);
     }
     
     /**

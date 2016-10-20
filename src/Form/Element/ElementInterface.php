@@ -11,6 +11,7 @@ namespace ObjectivePHP\Html\Form\Element;
 
 
 use ObjectivePHP\Html\Form\Element\Description\DescriptionInterface;
+use ObjectivePHP\Html\Form\FormInterface;
 use ObjectivePHP\Html\Form\Renderer\RenderableInterface;
 use ObjectivePHP\Html\Form\Element\Input\InputInterface;
 use ObjectivePHP\Html\Form\Element\Label\LabelInterface;
@@ -50,5 +51,9 @@ interface ElementInterface extends RenderableInterface, AttributesProvider
     public function getMessages() : Stack;
     
     public function validate() : Stack;
+
+    public function setForm(FormInterface $form);
+
+    public function getForm() : FormInterface;
     
 }
