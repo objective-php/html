@@ -17,28 +17,60 @@ use ObjectivePHP\Html\Tag\Attributes\AttributesHandler;
 use ObjectivePHP\Notification\Stack;
 use ObjectivePHP\Primitives\Collection\Collection;
 
+/**
+ * Class AbstractForm
+ * @package ObjectivePHP\Html\Form
+ */
 abstract class AbstractForm implements FormInterface
 {
     use RenderingHandler;
     use AttributesHandler;
     use ValidationHandler;
-    
+
+    /**
+     * @var
+     */
     protected $name;
-    
+
+    /**
+     * @var $this
+     */
     protected $elements;
-    
+
+    /**
+     * @var string
+     */
     protected $action = '';
-    
+
+    /**
+     * AbstractForm constructor.
+     */
     public function __construct()
     {
         $this->elements = (new Collection())->restrictTo(ElementInterface::class);
         
         $this->init();
     }
-    
+
+    /**
+     * Delegated constructor
+     *
+     * This method is intended to be overridden by inherited classes
+     */
     protected function init()
     {
         
+    }
+
+    /**
+     * Elements on-the-fly customization
+     *
+     * This method is intended to be overridden by inherited classes
+     *
+     */
+    protected function prepareElement(ElementInterface $element)
+    {
+
     }
     
     /**
@@ -80,18 +112,31 @@ abstract class AbstractForm implements FormInterface
         
         return $this;
     }
-    
-    
+
+
+    /**
+     * @param ElementInterface $element
+     */
     public function addElement(ElementInterface $element)
     {
+        // prepare element
+        $this->prepareElement($element);
+
         $this->getElements()->append($element);
     }
-    
+
+    /**
+     * @return Collection
+     */
     public function getElements() : Collection
     {
         return $this->elements;
     }
-    
+
+    /**
+     * @param $values
+     * @return FormInterface
+     */
     public function setValues($values) : FormInterface
     {
         foreach ($values as $element => $value)
@@ -104,7 +149,10 @@ abstract class AbstractForm implements FormInterface
         
         return $this;
     }
-    
+
+    /**
+     * @return array
+     */
     public function getValues() : array
     {
         $values = [];
@@ -117,7 +165,11 @@ abstract class AbstractForm implements FormInterface
         
         return $values;
     }
-    
+
+    /**
+     * @param $defaultValues
+     * @return FormInterface
+     */
     public function setDefaultValues($defaultValues) : FormInterface
     {
         foreach ($defaultValues as $element => $value)
@@ -130,7 +182,10 @@ abstract class AbstractForm implements FormInterface
         
         return $this;
     }
-    
+
+    /**
+     * @return array
+     */
     public function getDefaultValues() : array
     {
         $defaultValues = [];
@@ -143,7 +198,10 @@ abstract class AbstractForm implements FormInterface
         
         return $defaultValues;
     }
-    
+
+    /**
+     * @return Stack
+     */
     public function validate() : Stack
     {
         $messages = new Stack();

@@ -13,6 +13,11 @@
       "name": "Gauthier 'Rusty' Delamarre",
       "email": "gauthier@objective-php.org",
       "role": "lead"
+    },
+    {
+      "name": "Flavien Rodrigues",
+      "email": "flavien@objective-php.org",
+      "role": "developer"
     }
   ],
   "require": {
