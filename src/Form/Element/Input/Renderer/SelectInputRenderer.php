@@ -25,10 +25,12 @@ class SelectInputRenderer implements RendererInterface
      */
     public function render(RenderableInterface $select, $content = null)
     {
-        $output = Input::select($select->getId());
+        $tag = Input::select($select->getId());
+        $tag->getAttributes()->merge($select->getAttributes());
         $options = $select->getElement()->getOptions();
-        $output->addOptions($options);
-        return $output;
+        $tag->addOptions($options);
+
+        return (string) $tag;
     }
     
 }

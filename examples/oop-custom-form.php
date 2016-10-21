@@ -45,6 +45,7 @@ class MyForm extends Form
         
         $select = new Select('list', 'Make a choice', ['first' => 'first', 'second' => 'second', 'third' => 'third']);
         $select->setDescription(new Description('Please note that first come before second and, of course, third come last.'));
+        $select->setIsRequired(true);
         $this->addElement($select);
         
         // add submit button

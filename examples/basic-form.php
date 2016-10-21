@@ -13,7 +13,6 @@ use ObjectivePHP\Html\Form\Element\Description\Description;
 use ObjectivePHP\Html\Form\Element\Label\Label;
 use ObjectivePHP\Html\Form\Element\Text;
 use ObjectivePHP\Html\Form\Form;
-use ObjectivePHP\Html\Tag\Input\Input;
 use ObjectivePHP\Html\Tag\Tag;
 
 require dirname(__DIR__) . '/vendor/autoload.php';
@@ -23,6 +22,7 @@ $text = (new Text('name', 'Name'))->attr('class', 'toto');
 $text->getInput()->attr('class', 'titi');
 $text->getLabel()->setPlacement(Label::BEFORE)->attr('class', 'test');
 $text->setDescription(new Description('Please enter your first name and last name.'));
+$text->setIsRequired(true);
 $form->addElement($text);
 
 $form->attr('class', 'form-class');
