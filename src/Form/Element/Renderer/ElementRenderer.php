@@ -29,11 +29,16 @@ class ElementRenderer implements RendererInterface
     public function render(RenderableInterface $select, $content = null)
     {
         $output = Tag::div();
-        
+
         $output->getAttributes()->merge($select->getAttributes());
-        
+
+        if ($select->isRequired()) {
+            $select->getLabel()->addClass('required');
+            $select->getInput()->attr('required', 'required');
+        }
+
         $renderedInput = $select->getInput()->render();
-        
+
         if ($select->hasLabel())
         {
             $label = $select->getLabel();
