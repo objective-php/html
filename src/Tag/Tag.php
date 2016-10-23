@@ -124,7 +124,7 @@
                 $tagName->append(...$content);
             }
 
-            $tagName->addClass(...$classes);
+            if($classes) $tagName->addClass(...$classes);
 
             return $tagName;
         }
