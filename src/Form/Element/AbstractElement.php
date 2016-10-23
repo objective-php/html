@@ -54,6 +54,11 @@ class AbstractElement implements ElementInterface
      */
     protected $form;
 
+    /**
+     * @var bool
+     */
+    protected $required = false;
+
     public function __construct($id, $label = null)
     {
         if (!is_null($label))
@@ -235,4 +240,26 @@ class AbstractElement implements ElementInterface
     {
         $this->form = $form;
     }
+
+    /**
+     * @return boolean
+     */
+    public function isRequired(): bool
+    {
+        return $this->required;
+    }
+
+    /**
+     * @param boolean $required
+     *
+     * @return $this
+     */
+    public function setRequired() : ElementInterface
+    {
+        $this->required = true;
+
+        return $this;
+    }
+
+
 }

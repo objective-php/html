@@ -9,6 +9,7 @@
 
 namespace ObjectivePHP\Html\Form\Element\Description\Renderer;
 
+use ObjectivePHP\Html\Form\Element\Description\DescriptionInterface;
 use ObjectivePHP\Html\Form\Renderer\RenderableInterface;
 use ObjectivePHP\Html\Form\Renderer\RendererInterface;
 use ObjectivePHP\Html\Tag\Tag;
@@ -17,7 +18,7 @@ class DescriptionRenderer implements RendererInterface
 {
 
     /**
-     * @param RenderableInterface $description
+     * @param DescriptionInterface $description
      * @param null $content
      *
      * @return mixed
@@ -27,6 +28,7 @@ class DescriptionRenderer implements RendererInterface
         $output = Tag::factory('details', Tag::factory('summary', 'help'));
         $output->getAttributes()->merge($description->getAttributes());
         $output->append(Tag::p($description->getText()));
+
         if (!is_null($content))
         {
             $output->append($content);

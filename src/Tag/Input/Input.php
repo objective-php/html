@@ -152,6 +152,11 @@
             return self::decorate($input);
         }
 
+        /**
+         * @param $value
+         * @param null $label
+         * @return Tag
+         */
         public static function option($value, $label = null)
         {
 
@@ -175,7 +180,7 @@
          * @param $name
          * @param ...$classes
          *
-         * @return $this
+         * @return Tag
          */
         public static function checkbox($id, $value = "1", ...$classes)
         {

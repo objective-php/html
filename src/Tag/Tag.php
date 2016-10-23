@@ -132,6 +132,7 @@
         /**
          * @param $tag
          *
+         * @return Tag
          * @throws \ObjectivePHP\Primitives\Exception
          */
         protected static function decorate($tag)

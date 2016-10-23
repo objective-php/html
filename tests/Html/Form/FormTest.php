@@ -31,7 +31,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
 
     }
 
-    public function testAddedAlementsGetFormInjected()
+    public function testAddedElementsGetFormInjected()
     {
         $form = new Form();
         $element = $this->getMockBuilder(AbstractElement::class)

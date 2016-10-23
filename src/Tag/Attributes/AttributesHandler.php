@@ -19,43 +19,7 @@ trait AttributesHandler
      * @var Attributes
      */
     protected $attributes;
-    
-    /**
-     * @return Attributes
-     */
-    public function getAttributes(): Attributes
-    {
-        if(is_null($this->attributes))
-        {
-            $this->attributes = new Attributes();
-        }
-        
-        return $this->attributes;
-    }
-    
-    /**
-     * @param Attributes $attributes
-     *
-     * @return $this
-     */
-    public function setAttributes(Attributes $attributes)
-    {
-        $this->attributes = $attributes;
-        
-        return $this;
-    }
-    
-    /**
-     * @param $attribute
-     *
-     * @return mixed|null
-     * @throws \ObjectivePHP\Primitives\Exception
-     */
-    public function getAttribute($attribute)
-    {
-        return $this->getAttributes()->get($attribute);
-    }
-    
+
     /**
      * @param       $attributes
      * @param array $mergePolicies
@@ -68,12 +32,11 @@ trait AttributesHandler
         {
             $mergePolicy = isset($mergePolicies[$attribute]) ? $mergePolicies[$attribute] : MergePolicy::REPLACE;
             $this->addAttribute($attribute, $value, $mergePolicy);
-        })
-        ;
-        
+        });
+
         return $this;
     }
-    
+
     /**
      * @param     $attribute
      * @param     $value
@@ -89,32 +52,55 @@ trait AttributesHandler
             case MergePolicy::REPLACE:
                 $this->getAttributes()->set($attribute, $value);
                 break;
-            
+
             case MergePolicy::NATIVE:
             case MergePolicy::COMBINE:
-                
+
                 $previousValue = $this->getAttributes()->get($attribute);
                 if ($previousValue)
                 {
                     $combinedValue = Collection::cast($previousValue)->merge(Collection::cast($value));
-                }
-                else
+                } else
                 {
                     $combinedValue = $value;
                 }
                 $this->getAttributes()->set($attribute, $combinedValue);
                 break;
-            
-            
+
+
             default:
                 throw new Exception('Only MergePolicy::REPLACE and COMBINE are implemented yet');
-            
+
         }
-        
+
         return $this;
     }
-    
-    
+
+    /**
+     * @return Attributes
+     */
+    public function getAttributes(): Attributes
+    {
+        if (is_null($this->attributes))
+        {
+            $this->attributes = new Attributes();
+        }
+
+        return $this->attributes;
+    }
+
+    /**
+     * @param Attributes $attributes
+     *
+     * @return $this
+     */
+    public function setAttributes(Attributes $attributes)
+    {
+        $this->attributes = $attributes;
+
+        return $this;
+    }
+
     /**
      * @param ...$attribute
      *
@@ -126,56 +112,97 @@ trait AttributesHandler
         {
             $this->getAttributes()->delete($htmlAttribute);
         }
-        
+
         return $this;
     }
-    
-    // PROXIES
+
     public function data($dataAttribute, $value = null)
     {
         $dataAttribute = 'data-' . $dataAttribute;
-        
+
         if (is_null($value))
         {
             return $this->getAttributes()->has($dataAttribute) ? $this->getAttributes()->get($dataAttribute) : null;
-        }
-        else
+        } else
         {
             $this->getAttributes()->set($dataAttribute, $value);
-            
+
             return $this;
         }
     }
-    
+
+    // PROXIES
+
     /**
      * @param      $attribute
      * @param null $value
-     * @param int  $mergePolicy
+     * @param int $mergePolicy
      *
      * @return $this|mixed|null
      */
     public function attr($attribute, $value = null, $mergePolicy = MergePolicy::REPLACE)
     {
-        if(is_null($value))
+        // shunt class assignation
+        if (strtolower($attribute) == 'class')
+        {
+            return $this->addClass($value);
+        }
+
+        if (is_null($value))
         {
             return $this->getAttributes()->has($attribute) ? $this->getAttributes()->get($attribute) : null;
-        }
-        else
+        } else
         {
             $this->addAttribute($attribute, $value, $mergePolicy);
-    
+
             return $this;
         }
     }
-    
+
     /**
-     * @return mixed|null
+     * @param ...$classes
+     *
+     * @return $this
+     */
+    public function addClass(...$classes)
+    {
+        $currentClasses = $this->getClasses();
+        foreach ($classes as $class)
+        {
+            $classesGroup = explode(' ', $class);
+            foreach ($classesGroup as $individualClass)
+            {
+                if (!$currentClasses->has($individualClass))
+                {
+                    $currentClasses->append($individualClass);
+                }
+            }
+        }
+
+        $currentClasses->add(Collection::cast($classes));
+
+        return $this;
+    }
+
+    /**
+     * @return Collection
      */
     public function getClasses()
     {
-        return $this->getAttributes()['class'];
+        return $this->getAttribute('class');
     }
-    
+
+    /**
+     * @param $attribute
+     *
+     * @return mixed|null
+     * @throws \ObjectivePHP\Primitives\Exception
+     */
+    public function getAttribute($attribute)
+    {
+        return $this->getAttributes()->get($attribute);
+    }
+
     /**
      * @param ...$class
      *
@@ -185,29 +212,14 @@ trait AttributesHandler
     {
         foreach ($class as $cssClass)
         {
-            $index = $this->getAttributes()['class']->search($cssClass);
-            unset($this->getAttributes()['class'][$index]);
-            
+            $index = $this->getClasses()->search($cssClass);
+            unset($this->getClasses()[$index]);
+
             // reset keys
-            $this->getAttributes()['class']->fromArray($this->getAttributes()['class']->values()->toArray());
+            $this->getClasses()->fromArray($this->getClasses()->values()->toArray());
         }
-        
+
         return $this;
     }
-    
-    /**
-     * @param ...$class
-     *
-     * @return $this
-     */
-    public function addClass(...$class)
-    {
-        foreach ($class as $cssClass)
-        {
-            $this->getAttributes()['class']->append(...Collection::cast(explode(' ', $cssClass)));
-        }
-        
-        return $this;
-    }
-    
+
 }

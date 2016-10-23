@@ -21,22 +21,22 @@ use ObjectivePHP\Notification\MessageInterface;
 class ElementRenderer implements RendererInterface
 {
     /**
-     * @param ElementInterface $select
+     * @param ElementInterface $element
      * @param null             $content
      *
      * @return mixed
      */
-    public function render(RenderableInterface $select, $content = null)
+    public function render(RenderableInterface $element, $content = null)
     {
         $output = Tag::div();
         
-        $output->getAttributes()->merge($select->getAttributes());
+        $output->getAttributes()->merge($element->getAttributes());
         
-        $renderedInput = $select->getInput()->render();
+        $renderedInput = $element->getInput()->render();
         
-        if ($select->hasLabel())
+        if ($element->hasLabel())
         {
-            $label = $select->getLabel();
+            $label = $element->getLabel();
             switch ($label->getPlacement())
             {
                 case LabelInterface::WRAP:
@@ -57,11 +57,11 @@ class ElementRenderer implements RendererInterface
             $output->append($renderedInput);
         }
 
-        if ($select->hasDescription()) {
-            $output->append($select->getDescription());
+        if ($element->hasDescription()) {
+            $output->append($element->getDescription());
         }
 
-        $messages = $select->getMessages();
+        $messages = $element->getMessages();
         if ($messages->count('alert') || $messages->count('warning'))
         {
             $ul = Tag::ul(null, 'message');

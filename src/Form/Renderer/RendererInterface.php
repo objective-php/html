@@ -12,5 +12,5 @@ namespace ObjectivePHP\Html\Form\Renderer;
 
 interface RendererInterface
 {
-    public function render(RenderableInterface $select, $content = null);
+    public function render(RenderableInterface $label, $content = null);
 }

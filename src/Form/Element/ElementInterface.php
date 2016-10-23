@@ -55,5 +55,9 @@ interface ElementInterface extends RenderableInterface, AttributesProvider
     public function setForm(FormInterface $form);
 
     public function getForm() : FormInterface;
+
+    public function setRequired() : ElementInterface;
+
+    public function isRequired() : bool;
     
 }

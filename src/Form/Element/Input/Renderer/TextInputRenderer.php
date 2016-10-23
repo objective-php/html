@@ -28,8 +28,8 @@ class TextInputRenderer implements RendererInterface
         $tag = Input::text($input->getId());
         $tag->getAttributes()->merge($input->getAttributes());
         $tag->attr('value', $input->getValue() ?: $input->getDefaultValue());
-        
-        return (string) $tag;
+        if($input->getElement()->isRequired()) $tag->attr('required', true);
+        return $tag;
     }
     
 }

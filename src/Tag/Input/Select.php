@@ -57,7 +57,7 @@
             {
                 $this->getContent()->append($value);
             }
-            else $this->getContent()->append(Option::option($value, $label));
+            else $this->getContent()->append(Option::option($value, $label)->disableAutoDump());
 
             return $this;
         }

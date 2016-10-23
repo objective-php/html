@@ -22,6 +22,20 @@
         }
 
         /**
+         * @param mixed $data
+         */
+        public function merge($data)
+        {
+            parent::merge($data);
+
+            // ensure class is still a Collection
+           $this->set('class', Collection::cast($this->get('class')));
+
+            return $this;
+        }
+
+
+        /**
          * @param $attribute
          * @param $value
          *

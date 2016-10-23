@@ -18,15 +18,15 @@ use ObjectivePHP\Html\Tag\Input\Input;
 class SelectInputRenderer implements RendererInterface
 {
     /**
-     * @param SelectInput $select
+     * @param SelectInput $selectInput
      * @param null        $content
      *
      * @return mixed
      */
-    public function render(RenderableInterface $select, $content = null)
+    public function render(RenderableInterface $selectInput, $content = null)
     {
-        $output = Input::select($select->getId());
-        $options = $select->getElement()->getOptions();
+        $output = Input::select($selectInput->getId())->disableAutoDump();
+        $options = $selectInput->getElement()->getOptions();
         $output->addOptions($options);
         return $output;
     }

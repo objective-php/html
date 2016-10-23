@@ -1,0 +1,8 @@
+.required {
+    font-weight: bold;
+    color: red;
+}
+
+label.required span:after {
+    content: ' *';
+}

@@ -19,18 +19,24 @@ class LabelRenderer implements RendererInterface
 {
     
     /**
-     * @param LabelInterface $select
+     * @param LabelInterface $label
      * @param null           $content
      *
      * @return mixed
      */
-    public function render(RenderableInterface $select, $content = null)
+    public function render(RenderableInterface $label, $content = null)
     {
-        $output = Tag::label($select->getText(), $select->getElement()->getInput()->getName());
-        $output->getAttributes()->merge($select->getAttributes());
+        $output = Tag::label(Tag::span($label->getText()), $label->getElement()->getInput()->getName());
+        $output->getAttributes()->merge($label->getAttributes());
+
         if (!is_null($content))
         {
             $output->append($content);
+        }
+
+        if($label->getElement()->isRequired())
+        {
+            $output->addClass('required');
         }
         
         return $output;
