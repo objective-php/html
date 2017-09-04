@@ -39,4 +39,26 @@
             echo '<!-- End of embedded JavaScript files -->' . PHP_EOL;
         }
 
+        static public function get()
+        {
+            return self::$files;
+        }
+
+        public static function clear()
+        {
+            self::$files = [];
+        }
+
+        public static function append($src, $attributes = [])
+        {
+            // remove any previous occurrence of the same file
+            unset(self::$files[$src]);
+            self::embed($src, $attributes);
+        }
+
+        public static function prepend($src, $attributes = [])
+        {
+            unset(self::$files[$src]);
+            self::$files = array_merge([$src => $attributes], self::$files);
+        }
     }
